@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Day6 from "assets/Day6.png";
+import day6Logo from "assets/day6Logo.png";
 import { AnimatePresence, motion } from "framer-motion";
 
 export const InitDay6 = ({ initDay6, setInitDay6 }) => {
@@ -13,7 +13,7 @@ export const InitDay6 = ({ initDay6, setInitDay6 }) => {
     <AnimatePresence>
       {initDay6 && (
         <AnimateLogoDay6
-          src={Day6}
+          src={day6Logo}
           variants={day6logoVariants}
           initial="initial"
           animate="animate"
