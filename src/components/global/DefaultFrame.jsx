@@ -5,7 +5,7 @@ import { Nav } from "./Nav";
 
 export const DefaultFrame = forwardRef((props, ref) => {
   return (
-    <Frame className="frame">
+    <Frame>
       <Nav />
       {props.children}
     </Frame>
