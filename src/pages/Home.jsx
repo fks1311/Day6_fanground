@@ -2,13 +2,15 @@ import { DefaultFrame } from "components/global/DefaultFrame";
 import day6 from "assets/day6.jpg";
 import styled from "styled-components";
 import { useOpenContext } from "components/global/ContextProvider";
+import { NavView } from "components/global/NavView";
 
 export const Home = () => {
   const { isOpen, setIsOpen } = useOpenContext();
 
   return (
     <DefaultFrame>
-      <NavView />
+      {isOpen && <NavView isOpen={isOpen} setIsOpen={setIsOpen} />}
+
       <Img src={day6} />
     </DefaultFrame>
   );
@@ -20,14 +22,4 @@ const Img = styled.img`
   height: 100%;
   width: 100%;
   object-fit: contain;
-`;
-
-const NavView = styled.div`
-  position: absolute;
-  top: 0;
-  background-color: skyblue;
-  height: 100%;
-  width: 100%;
-  // z-index: 1;
-  // opacity: 0.8;
 `;
