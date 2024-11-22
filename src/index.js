@@ -7,7 +7,6 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { theme } from "utils/style";
 import router from "./utils/Router";
 import { OpenProvider } from "components/global/ContextProvider";
-import { createGlobalState } from "react-use";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const GlobalStyle = createGlobalStyle`
@@ -22,7 +21,6 @@ root.render(
     <OpenProvider>
       <RecoilRoot>
         <ThemeProvider theme={theme}>
-          {/* <Reset /> */}
           <GlobalStyle />
           <RouterProvider router={router} />
         </ThemeProvider>

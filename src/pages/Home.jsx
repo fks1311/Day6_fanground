@@ -8,20 +8,38 @@ import day6_6 from "assets/Day6_6.jpeg";
 import styled from "styled-components";
 import { useOpenContext } from "components/global/ContextProvider";
 import { NavView } from "components/global/NavView";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export const Home = () => {
   const { isOpen, setIsOpen } = useOpenContext();
+  const settings = {
+    dots: false,
+    fade: true,
+    infinite: true,
+    speed: 2000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    waitForAnimate: false,
+    autoplay: true,
+  };
+  const images = [day6_1, day6_2, day6_3, day6_4, day6_5, day6_6];
 
   return (
     <DefaultFrame>
       {isOpen && <NavView isOpen={isOpen} setIsOpen={setIsOpen} />}
-      <Img src={day6_1} />
+      <Slider {...settings}>
+        {images.map((data, idx) => (
+          <Img key={idx} src={data} />
+        ))}
+      </Slider>
     </DefaultFrame>
   );
 };
 
 const Img = styled.img`
-  width: 100%;
+  width: 80%;
   height: 100vh;
   object-fit: contain;
 `;
