@@ -10,7 +10,7 @@ export const DefaultFrame = forwardRef((props, ref) => {
 
   return (
     <Frame className="frame">
-      <Confetti width={width} height={height} numberOfPieces={2000} recycle={false} tweenDuration={10000} />
+      {/* <Confetti width={width} height={height} numberOfPieces={2000} recycle={false} tweenDuration={10000} /> */}
       <Nav />
       {/* <Trophy>🏆 데식이들 대상을 축하합니다 🏆</Trophy> */}
       {props.children}
