@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { RiMenuFill } from "react-icons/ri";
 import styled from "styled-components";
@@ -7,9 +8,14 @@ import { useOpenContext } from "./ContextProvider";
 export const Nav = () => {
   const { isOpen, setIsOpen } = useOpenContext(false);
   const navigate = useNavigate();
+  const heightRef = useRef();
+
+  useEffect(() => {
+    // setNavHeight(heightRef.current?.offsetHeight);
+  }, []);
 
   return (
-    <NavContainer>
+    <NavContainer ref={heightRef}>
       <Img src={day6} onClick={() => navigate("/day6")} />
       <Icon>
         <RiMenuFill

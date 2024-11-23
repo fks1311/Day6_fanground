@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
 import { MdClose } from "react-icons/md";
@@ -12,7 +13,14 @@ const hiddenMask = `repeating-linear-gradient(to right, rgba(0,0,0,0) 0px, rgba(
 const visibleMask = `repeating-linear-gradient(to right, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 0px, rgba(0,0,0,1) 0px, rgba(0,0,0,1) 30px)`;
 
 export const NavView = ({ isOpen, setIsOpen }) => {
-  const Lists = ["Profile", "MV", "Album", "Youtube", "Search"];
+  const navigate = useNavigate();
+  const navlists = [
+    { id: "Profile", link: "/profile" },
+    { id: "MV", link: "/mv" },
+    { id: "Album", link: "/album" },
+    { id: "Youtube", link: "/youtube" },
+    { id: "Search", link: "/search" },
+  ];
   const [isLoad, setIsLoad] = useState(true);
   const [showItems, setShowItems] = useState(false);
   const icons = [
@@ -81,8 +89,16 @@ export const NavView = ({ isOpen, setIsOpen }) => {
                 ))}
               </SocialIcons>
               <Item variants={itemVariants} initial="init" animate="show">
-                {Lists.map((item, idx) => (
-                  <Items key={idx}>{item.toLocaleUpperCase()}</Items>
+                {navlists.map((item, idx) => (
+                  <Items
+                    key={idx}
+                    onClick={() => {
+                      navigate(item.link);
+                      setIsOpen(false);
+                    }}
+                  >
+                    {item.id.toLocaleUpperCase()}
+                  </Items>
                 ))}
               </Item>
             </ShowContainer>
