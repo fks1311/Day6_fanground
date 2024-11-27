@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import styled from "styled-components";
 import YouTube from "react-youtube";
-import { AiOutlineAppstore } from "react-icons/ai";
+import { AiOutlineAppstore, AiOutlineSplitCells } from "react-icons/ai";
 import { DefaultFrame } from "components/global/DefaultFrame";
 import decodeHTMLEntities from "utils/decodeHTMLEntities";
 
