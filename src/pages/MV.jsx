@@ -8,7 +8,7 @@ import { DefaultFrame } from "components/global/DefaultFrame";
 import decodeHTMLEntities from "utils/decodeHTMLEntities";
 
 export const MV = () => {
-  const [currentId, setCurrentId] = useState(1);
+  const [currentId, setCurrentId] = useState(0);
   const youtubeApiUrl = "https://www.googleapis.com/youtube/v3/search";
   const params = {
     key: process.env.REACT_APP_API_KEY,

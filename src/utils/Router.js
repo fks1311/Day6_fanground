@@ -1,3 +1,4 @@
+import { Album } from "pages/Album";
 import { Home } from "pages/Home";
 import { Loading } from "pages/Loading";
 import { MV } from "pages/MV";
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/album",
-    element: <MV />,
+    element: <Album />,
   },
   {
     path: "/youtube",
