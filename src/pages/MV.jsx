@@ -44,7 +44,7 @@ export const MV = () => {
               />
             </div>
           </Video>
-          <VideoList className="li">
+          <VideoList>
             <Icon>
               <AiOutlineAppstore size={30} />
             </Icon>
@@ -69,15 +69,16 @@ export const MV = () => {
 const Layout = styled.div`
   width: 100%;
   display: flex;
+  justify-content: space-evenly;
+  padding: 2rem;
 `;
 
 const Video = styled.div`
-  flex: 3.5;
+  // flex: 3;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #b3c8cf;
 `;
 const Title = styled.div`
   padding: 2rem;
@@ -86,12 +87,12 @@ const Title = styled.div`
 `;
 
 const VideoList = styled.div`
-  flex: 0.8;
+  // flex: 0.8;
 
   display: flex;
   flex-direction: column;
-  background-color: #89a8b2;
-  overflow: scroll;
+  overflow-y: scroll;
+  // padding: 2rem;
 `;
 
 const Icon = styled.div`
