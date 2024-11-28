@@ -10,10 +10,10 @@ export const DefaultFrame = forwardRef((props, ref) => {
   const { isOpen, setIsOpen } = useOpenContext(false);
 
   return (
-    <Frame className="frame">
+    <Frame>
       <Nav />
       {isOpen && <NavView isOpen={isOpen} setIsOpen={setIsOpen} />}
-      <Layout className="layout">{props.children}</Layout>
+      <Layout>{props.children}</Layout>
     </Frame>
   );
 });
