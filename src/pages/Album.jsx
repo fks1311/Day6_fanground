@@ -1,4 +1,5 @@
 import axios from "axios";
+import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { DefaultFrame } from "components/global/DefaultFrame";
 import styled from "styled-components";
@@ -39,7 +40,7 @@ export const Album = () => {
           <span>ALBUM LIST</span>
           <Lists>
             {data.data.map((data, idx) => (
-              <Cover>
+              <Cover to={`/album/${data.album}`}>
                 <img key={idx} src={`https://fks1311.github.io/day6_cdn_data/public${data.cover}`} />
                 <p>{data.album}</p>
               </Cover>
@@ -71,10 +72,12 @@ const Lists = styled.div`
   }
 `;
 
-const Cover = styled.div`
+const Cover = styled(NavLink)`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   font-family: SUIT-Bold;
+  text-decoration-line: none;
+  color: black;
 `;
