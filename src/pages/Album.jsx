@@ -5,13 +5,6 @@ import { DefaultFrame } from "components/global/DefaultFrame";
 import styled from "styled-components";
 
 export const Album = () => {
-  const youtubeApiUrl = "https://www.googleapis.com/youtube/v3/playlists";
-  const params = {
-    key: process.env.REACT_APP_API_KEY,
-    part: "snippet",
-    channelId: "UCp-pqXsizklX3ZHvLxXyhxw",
-  };
-
   const { isLoading, data } = useQuery({
     queryKey: ["day6"],
     queryFn: async () => {
@@ -20,16 +13,7 @@ export const Album = () => {
     },
   });
 
-  //   const { isLoading, data, error } = useQuery({
-  //     queryKey: ["day6"],
-  //     queryFn: async () => {
-  //       const response = await axios.get(youtubeApiUrl, { params });
-  //       return response;
-  //     },
-  //   });
-
-  //   console.log(data);
-  //   if (error) return <p>{console.log(error)}</p>;
+  console.log(data);
 
   return (
     <DefaultFrame>
@@ -40,8 +24,14 @@ export const Album = () => {
           <span>ALBUM LIST</span>
           <Lists>
             {data.data.map((data, idx) => (
-              <Cover to={`/album/${data.album}`}>
-                <img key={idx} src={`https://fks1311.github.io/day6_cdn_data/public${data.cover}`} />
+              <Cover
+                key={idx}
+                to={`/album/${data.album}`}
+                state={{
+                  album: data.album,
+                }}
+              >
+                <img src={`https://fks1311.github.io/day6_cdn_data/public${data.cover}`} />
                 <p>{data.album}</p>
               </Cover>
             ))}
