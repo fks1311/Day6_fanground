@@ -23,6 +23,7 @@ const Frame = styled(motion.div)`
   position: relative;
   display: flex;
   justify-content: center;
+  margin-bottom: 3rem;
 `;
 
 const Layout = styled.div`

@@ -13,8 +13,6 @@ export const Album = () => {
     },
   });
 
-  console.log(data);
-
   return (
     <DefaultFrame>
       {isLoading ? (

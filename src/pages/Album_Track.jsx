@@ -1,39 +1,74 @@
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { DefaultFrame } from "components/global/DefaultFrame";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import YouTube from "react-youtube";
 import styled from "styled-components";
+import { useState } from "react";
 
 export const Album_Track = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [curMV, setCurMV] = useState();
 
-  // const youtubeApiUrl = "https://www.googleapis.com/youtube/v3/playlists";
-  // const params = {
-  //   key: process.env.REACT_APP_API_KEY,
-  //   part: "snippet",
-  //   channelId: "UCp-pqXsizklX3ZHvLxXyhxw",
-  // };
-  //   const { isLoading, data, error } = useQuery({
-  //     queryKey: ["day6"],
-  //     queryFn: async () => {
-  //       const response = await axios.get(youtubeApiUrl, { params });
-  //       return response;
-  //     },
-  //   });
+  const youtubePlaylistItemsApiUrl = "https://www.googleapis.com/youtube/v3/playlistItems";
+  const youtubePlaylistApiUrl = "https://www.googleapis.com/youtube/v3/playlists";
+  const params = {
+    key: process.env.REACT_APP_API_KEY,
+    part: "snippet",
+    channelId: "UCp-pqXsizklX3ZHvLxXyhxw",
+    maxResults: 50,
+  };
 
+  // mv
   const { isLoading: mvLoading, data: mvData } = useQuery({
     queryKey: ["mv"],
     queryFn: async () => {
       const response = await axios.get("https://fks1311.github.io/day6_cdn_data/public/mv_list.json");
       const filter = response.data.filter((f, i) => f.album === decodeURI(location.state.album));
+      setCurMV(filter[0].videoId);
       return filter;
     },
   });
 
-  const loading = mvLoading;
+  // playlist
+  const { isLoading: plLoading, data: plData } = useQuery({
+    queryKey: ["playlist"],
+    queryFn: async () => {
+      const response = await axios.get(youtubePlaylistApiUrl, { params });
+      const filter = response.data.items.filter((f, i) => f.snippet.title.includes(decodeURI(location.state.album)));
+      return filter;
+    },
+  });
+
+  const loading = mvLoading || plLoading;
+
+  // playlistItems
+  const plitems = useQueries({
+    queries:
+      !plLoading && plData
+        ? plData.map((data) => ({
+            queryKey: [data.id],
+            queryFn: async () =>
+              await axios.get(youtubePlaylistItemsApiUrl, {
+                params: {
+                  key: process.env.REACT_APP_API_KEY,
+                  part: "snippet",
+                  playlistId: data.id,
+                  maxResults: 50,
+                },
+              }),
+          }))
+        : [],
+    combine: (result) => {
+      return {
+        data: result.filter((res) => res?.data?.data?.items).flatMap((res) => res.data.data.items),
+      };
+    },
+  });
+
+  console.log(plitems);
 
   return (
     <DefaultFrame>
@@ -47,30 +82,40 @@ export const Album_Track = () => {
           </BackBtn>
           <AlbumFrame>
             <AlbumTitle gradients={mvData[0].gradients}>{decodeURI(location.state.album)}</AlbumTitle>
-            <AlbumInfo>
+            <AlbumInfo className="albuminfo">
               <MvFrame>
                 <YouTube
-                  videoId={mvData[0].videoId}
+                  videoId={curMV}
                   opts={{
                     width: "800",
                     height: "500",
                   }}
                 />
               </MvFrame>
-              <TrackLists>
+              <TrackLists className="track">
                 <img src={`https://fks1311.github.io/day6_cdn_data/public${mvData[0].cover}`} />
                 <div>TRACK LIST</div>
                 {mvData[0].track_list.map((data, idx) => (
-                  <Lists gap={data === mvData[0].title && true}>
-                    <span key={idx}>
+                  <MVLists $gap={data === mvData[0].title} key={idx}>
+                    <span>
                       {idx + 1}. {data}
                     </span>
                     <span>{data === mvData[0].title && "✦ Title"}</span>
-                  </Lists>
+                  </MVLists>
                 ))}
               </TrackLists>
             </AlbumInfo>
-            <PlayLists>Related playlists</PlayLists>
+            <PlayLists className="playlists">
+              Related playlists
+              {/* <PlLists className="li">
+                {plitems.data.map((data, idx) => (
+                  <div key={idx}>
+                    <img src={data.snippet.thumbnails.default?.url} />
+                    <span>{data.snippet.title}</span>
+                  </div>
+                ))}
+              </PlLists> */}
+            </PlayLists>
           </AlbumFrame>
         </Layout>
       )}
@@ -88,7 +133,6 @@ const BackBtn = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  // margin-top: 2rem;
   font-family: SUIT-Regular;
   font-size: 1rem;
 `;
@@ -96,7 +140,6 @@ const AlbumFrame = styled.div`
   width: 60%;
   display: flex;
   flex-direction: column;
-  // align-items: center;
   gap: 1rem;
   font-family: SUIT-Bold;
   font-size: 20px;
@@ -128,12 +171,30 @@ const TrackLists = styled.div`
     width: 40%;
   }
 `;
-const Lists = styled.div`
+const MVLists = styled.div`
   display: flex;
-  gap: ${({ gap }) => gap && `1rem`};
-  font-family: ${({ gap }) => (gap ? `SUIT-Bold` : `SUIT-Regular`)};
+  gap: ${({ $gap }) => $gap && `1rem`};
+  font-family: ${({ $gap }) => ($gap ? `SUIT-Bold` : `SUIT-Regular`)};
   span {
     font-size: 14px;
   }
 `;
-const PlayLists = styled.div``;
+const PlayLists = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+const PlLists = styled.div`
+  overflow-y: hidden;
+  display: flex;
+  gap: 1rem;
+  div {
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    gap: 0.3rem;
+  }
+  img {
+    width: 100%;
+  }
+`;
