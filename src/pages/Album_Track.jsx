@@ -76,26 +76,26 @@ export const Album_Track = () => {
       {loading ? (
         <></>
       ) : (
-        <Layout className="layout">
+        <Layout>
           <BackBtn onClick={() => navigate(-1)}>
             <IoArrowBackCircleOutline size={20} />
             Back
           </BackBtn>
           <AlbumFrame>
             <AlbumTitle gradients={mvData[0].gradients}>{decodeURI(location.state.album)}</AlbumTitle>
-            <AlbumInfo className="albuminfo">
+            <AlbumInfo>
               <AlbumMusicVideo>
                 <YouTube
                   videoId={curMV}
                   opts={{
-                    width: "1000",
+                    width: "100%",
                     height: "650",
                   }}
                 />
               </AlbumMusicVideo>
               <Accordion>
-                <TrackList gradients={mvData[0].gradients} $track={track} className="tracklist">
-                  <Subject onClick={() => setTrack(!track)} className="subject">
+                <TrackList gradients={mvData[0].gradients} $track={track}>
+                  <Subject gradients={mvData[0].gradients} onClick={() => setTrack(!track)}>
                     TRACK LIST
                     <IoIosArrowDropdown />
                   </Subject>
@@ -114,8 +114,8 @@ export const Album_Track = () => {
                   </Content>
                 </TrackList>
                 <RelatedList gradients={mvData[0].gradients} $playlist={playlist}>
-                  <Subject onClick={() => setPlaylist(!playlist)}>
-                    Related playlists
+                  <Subject gradients={mvData[0].gradients} onClick={() => setPlaylist(!playlist)}>
+                    Related Playlists
                     <IoIosArrowDropdown />
                   </Subject>
                   <Content direction={`column`}>
@@ -168,12 +168,13 @@ const AlbumTitle = styled.div`
   font-size: 2.5rem;
   font-family: SUIT-Bold;
   text-align: center;
+  border-radius: 10px;
   background-image: ${({ gradients }) => gradients};
 `;
 
 const AlbumInfo = styled.div`
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
     display: none;
@@ -181,7 +182,7 @@ const AlbumInfo = styled.div`
 `;
 const AlbumMusicVideo = styled.div`
   flex: 1;
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
 `;
 
@@ -196,12 +197,17 @@ const Subject = styled.div`
   top: 0;
   display: flex;
   justify-content: space-between;
+  padding: 1rem;
+  border-radius: 10px;
+  background-image: ${({ gradients }) => gradients};
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
 const Content = styled.div`
   display: flex;
   flex-direction: ${({ direction }) => direction};
   gap: 1rem;
+  padding: 1rem;
 `;
 
 const TrackList = styled.div`
@@ -210,15 +216,13 @@ const TrackList = styled.div`
   overflow-y: ${({ $track }) => $track && `auto`};
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
   color: white;
   border-radius: 10px;
   background-image: ${({ gradients }) => gradients};
 `;
 const Cover = styled.img`
   max-height: ${({ $track }) => ($track ? `200px` : `0px`)};
-  width: 40%;
+  width: 45%;
   border-radius: 10px;
 `;
 const Track = styled.div`
@@ -240,8 +244,6 @@ const RelatedList = styled.div`
   max-height: ${({ $playlist }) => ($playlist ? `590px` : `50px`)};
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
   color: white;
   border-radius: 10px;
   background-image: ${({ gradients }) => gradients};
