@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { DefaultFrame } from "components/global/DefaultFrame";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
+import { IoIosArrowDropdown, IoIosArrowDropup } from "react-icons/io";
 import YouTube from "react-youtube";
 import styled from "styled-components";
 import { useState } from "react";
@@ -11,6 +12,8 @@ export const Album_Track = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [curMV, setCurMV] = useState();
+  const [track, setTrack] = useState(false);
+  const [playlist, setPlaylist] = useState(false);
 
   const youtubePlaylistItemsApiUrl = "https://www.googleapis.com/youtube/v3/playlistItems";
   const youtubePlaylistApiUrl = "https://www.googleapis.com/youtube/v3/playlists";
@@ -68,8 +71,6 @@ export const Album_Track = () => {
     },
   });
 
-  console.log(plitems);
-
   return (
     <DefaultFrame>
       {loading ? (
@@ -83,39 +84,52 @@ export const Album_Track = () => {
           <AlbumFrame>
             <AlbumTitle gradients={mvData[0].gradients}>{decodeURI(location.state.album)}</AlbumTitle>
             <AlbumInfo className="albuminfo">
-              <MvFrame>
+              <AlbumMusicVideo>
                 <YouTube
                   videoId={curMV}
                   opts={{
-                    width: "800",
-                    height: "500",
+                    width: "1000",
+                    height: "650",
                   }}
                 />
-              </MvFrame>
-              <TrackLists className="track">
-                <img src={`https://fks1311.github.io/day6_cdn_data/public${mvData[0].cover}`} />
-                <div>TRACK LIST</div>
-                {mvData[0].track_list.map((data, idx) => (
-                  <MVLists $gap={data === mvData[0].title} key={idx}>
-                    <span>
-                      {idx + 1}. {data}
-                    </span>
-                    <span>{data === mvData[0].title && "✦ Title"}</span>
-                  </MVLists>
-                ))}
-              </TrackLists>
+              </AlbumMusicVideo>
+              <Accordion>
+                <TrackList gradients={mvData[0].gradients} $track={track} className="tracklist">
+                  <Subject onClick={() => setTrack(!track)} className="subject">
+                    TRACK LIST
+                    <IoIosArrowDropdown />
+                  </Subject>
+                  <Content>
+                    <Cover src={`https://fks1311.github.io/day6_cdn_data/public${mvData[0].cover}`} $track={track} />
+                    <Track>
+                      {mvData[0].track_list.map((data, idx) => (
+                        <Lists $gap={data === mvData[0].title} key={idx}>
+                          <span>
+                            {idx + 1}. {data}
+                          </span>
+                          <span>{data === mvData[0].title && "✦ Title"}</span>
+                        </Lists>
+                      ))}
+                    </Track>
+                  </Content>
+                </TrackList>
+                <RelatedList gradients={mvData[0].gradients} $playlist={playlist}>
+                  <Subject onClick={() => setPlaylist(!playlist)}>
+                    Related playlists
+                    <IoIosArrowDropdown />
+                  </Subject>
+                  <Content direction={`column`}>
+                    {plitems.data.map((data, idx) => (
+                      <PlayList key={idx}>
+                        <span>{idx + 1}</span>
+                        <img src={data.snippet.thumbnails.default?.url} />
+                        <span>{data.snippet.title}</span>
+                      </PlayList>
+                    ))}
+                  </Content>
+                </RelatedList>
+              </Accordion>
             </AlbumInfo>
-            <PlayLists className="playlists">
-              Related playlists
-              {/* <PlLists className="li">
-                {plitems.data.map((data, idx) => (
-                  <div key={idx}>
-                    <img src={data.snippet.thumbnails.default?.url} />
-                    <span>{data.snippet.title}</span>
-                  </div>
-                ))}
-              </PlLists> */}
-            </PlayLists>
           </AlbumFrame>
         </Layout>
       )}
@@ -123,10 +137,12 @@ export const Album_Track = () => {
   );
 };
 const Layout = styled.div`
+  width: 80%;
   display: flex;
   justify-content: center;
   gap: 1.5rem;
 `;
+
 const BackBtn = styled.div`
   display: flex;
   flex-direction: column;
@@ -136,8 +152,9 @@ const BackBtn = styled.div`
   font-family: SUIT-Regular;
   font-size: 1rem;
 `;
+
 const AlbumFrame = styled.div`
-  width: 60%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -147,31 +164,69 @@ const AlbumFrame = styled.div`
 const AlbumTitle = styled.div`
   width: 100%;
   padding: 2rem;
+  color: white;
   font-size: 2.5rem;
   font-family: SUIT-Bold;
   text-align: center;
-  color: white;
   background-image: ${({ gradients }) => gradients};
 `;
+
 const AlbumInfo = styled.div`
-  width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
   gap: 2rem;
+  -ms-overflow-style: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
-const MvFrame = styled.div``;
-const TrackLists = styled.div`
-  height: 503px;
+const AlbumMusicVideo = styled.div`
+  flex: 1;
+  border-radius: 10px;
+  overflow: hidden;
+`;
+
+const Accordion = styled.div`
+  flex: 0.5;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  overflow-y: auto;
-  img {
-    width: 40%;
-  }
 `;
-const MVLists = styled.div`
+const Subject = styled.div`
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: ${({ direction }) => direction};
+  gap: 1rem;
+`;
+
+const TrackList = styled.div`
+  width: 100%;
+  max-height: ${({ $track }) => ($track ? `360px` : `50px`)};
+  overflow-y: ${({ $track }) => $track && `auto`};
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  color: white;
+  border-radius: 10px;
+  background-image: ${({ gradients }) => gradients};
+`;
+const Cover = styled.img`
+  max-height: ${({ $track }) => ($track ? `200px` : `0px`)};
+  width: 40%;
+  border-radius: 10px;
+`;
+const Track = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+const Lists = styled.div`
   display: flex;
   gap: ${({ $gap }) => $gap && `1rem`};
   font-family: ${({ $gap }) => ($gap ? `SUIT-Bold` : `SUIT-Regular`)};
@@ -179,22 +234,28 @@ const MVLists = styled.div`
     font-size: 14px;
   }
 `;
-const PlayLists = styled.div`
+
+const RelatedList = styled.div`
+  width: 100%;
+  max-height: ${({ $playlist }) => ($playlist ? `590px` : `50px`)};
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 1rem;
+  color: white;
+  border-radius: 10px;
+  background-image: ${({ gradients }) => gradients};
+  overflow: hidden;
+  overflow-y: auto;
 `;
-const PlLists = styled.div`
-  overflow-y: hidden;
+const PlayList = styled.div`
   display: flex;
+  align-items: center;
   gap: 1rem;
-  div {
-    display: flex;
-    flex-direction: column;
-    font-size: 12px;
-    gap: 0.3rem;
-  }
+  font-size: 14px;
+  font-family: SUIT-Regular;
+  line-height: 1.5rem;
   img {
-    width: 100%;
+    border-radius: 10px;
   }
 `;

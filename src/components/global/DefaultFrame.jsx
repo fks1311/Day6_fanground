@@ -6,7 +6,6 @@ import { NavView } from "./NavView";
 import { useOpenContext } from "./ContextProvider";
 
 export const DefaultFrame = forwardRef((props, ref) => {
-  // const [navHeight, setNavHeight] = useState();
   const { isOpen, setIsOpen } = useOpenContext(false);
 
   return (
@@ -23,7 +22,6 @@ const Frame = styled(motion.div)`
   position: relative;
   display: flex;
   justify-content: center;
-  margin-bottom: 3rem;
 `;
 
 const Layout = styled.div`
