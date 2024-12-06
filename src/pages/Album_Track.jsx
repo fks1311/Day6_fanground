@@ -6,7 +6,7 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { IoIosArrowDropdown, IoIosArrowDropup } from "react-icons/io";
 import YouTube from "react-youtube";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const Album_Track = () => {
   const location = useLocation();
@@ -14,6 +14,17 @@ export const Album_Track = () => {
   const [curMV, setCurMV] = useState();
   const [track, setTrack] = useState(false);
   const [playlist, setPlaylist] = useState(false);
+  const curAccordionHeight = useRef();
+  const curTrackListHeight = useRef();
+  const [curAccordion, setCurAccordion] = useState();
+  const [curTrackList, setCurTrackList] = useState();
+  const [videoKey, setVideoKey] = useState(curMV); // 비디오 컴포넌트가 상태 변경을 제대로 인식하지 못하여 강제로 재렌더링 하도록 작업 진행
+
+  useEffect(() => {
+    setCurAccordion(curAccordionHeight?.current?.clientHeight);
+    setCurTrackList(curTrackListHeight?.current?.clientHeight);
+    setVideoKey(curMV);
+  }, [track, playlist, curMV]);
 
   const youtubePlaylistItemsApiUrl = "https://www.googleapis.com/youtube/v3/playlistItems";
   const youtubePlaylistApiUrl = "https://www.googleapis.com/youtube/v3/playlists";
@@ -86,6 +97,7 @@ export const Album_Track = () => {
             <AlbumInfo>
               <AlbumMusicVideo>
                 <YouTube
+                  key={videoKey}
                   videoId={curMV}
                   opts={{
                     width: "100%",
@@ -93,8 +105,8 @@ export const Album_Track = () => {
                   }}
                 />
               </AlbumMusicVideo>
-              <Accordion>
-                <TrackList gradients={mvData[0].gradients} $track={track}>
+              <Accordion className="accordion" ref={curAccordionHeight}>
+                <TrackList gradients={mvData[0].gradients} $track={track} ref={curTrackListHeight}>
                   <Subject gradients={mvData[0].gradients} onClick={() => setTrack(!track)}>
                     TRACK LIST
                     <IoIosArrowDropdown />
@@ -113,14 +125,19 @@ export const Album_Track = () => {
                     </Track>
                   </Content>
                 </TrackList>
-                <RelatedList gradients={mvData[0].gradients} $playlist={playlist}>
+                <RelatedList
+                  gradients={mvData[0].gradients}
+                  $playlist={playlist}
+                  accordion={curAccordion}
+                  $trackHeight={curTrackList}
+                >
                   <Subject gradients={mvData[0].gradients} onClick={() => setPlaylist(!playlist)}>
                     Related Playlists
                     <IoIosArrowDropdown />
                   </Subject>
                   <Content direction={`column`}>
                     {plitems.data.map((data, idx) => (
-                      <PlayList key={idx}>
+                      <PlayList key={idx} onClick={() => setCurMV(data.snippet.resourceId.videoId)}>
                         <span>{idx + 1}</span>
                         <img src={data.snippet.thumbnails.default?.url} />
                         <span>{data.snippet.title}</span>
@@ -241,14 +258,15 @@ const Lists = styled.div`
 
 const RelatedList = styled.div`
   width: 100%;
-  max-height: ${({ $playlist }) => ($playlist ? `590px` : `50px`)};
+  max-height: ${({ $playlist, accordion, $trackHeight }) =>
+    $playlist ? (accordion > 656 ? `calc(${656 - $trackHeight - 14}px)` : `590px`) : `50px`};
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  overflow-y: auto;
   color: white;
   border-radius: 10px;
   background-image: ${({ gradients }) => gradients};
-  overflow: hidden;
-  overflow-y: auto;
 `;
 const PlayList = styled.div`
   display: flex;
