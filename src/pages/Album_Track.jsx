@@ -133,7 +133,7 @@ export const Album_Track = () => {
                   }}
                 />
               </AlbumMusicVideo>
-              <Accordion className="accordion" ref={curAccordionHeight}>
+              <Accordion ref={curAccordionHeight}>
                 <TrackList gradients={mvData[0].gradients} $track={track} ref={curTrackListHeight}>
                   <Subject gradients={mvData[0].gradients} onClick={() => setTrack(!track)}>
                     TRACK LIST

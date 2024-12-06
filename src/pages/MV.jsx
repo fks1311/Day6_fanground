@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import styled from "styled-components";
@@ -18,12 +19,48 @@ export const MV = () => {
     },
   });
 
+  const layoutVariants = {
+    init: {
+      opacity: 0,
+      y: 15,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 3,
+        delayChildren: 0.5,
+      },
+    },
+  };
+
+  const listVariants = {
+    init: { opacity: 0, y: 10 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 2,
+      },
+    },
+  };
+
+  const isImgVariants = {
+    init: { opacity: 0 },
+    show: { opacity: 1, transition: { duration: 0.5 } },
+  };
+
+  const combineVariants = {
+    init: { ...listVariants.init, ...isImgVariants.init },
+    show: { ...listVariants.show, ...isImgVariants.show },
+  };
+
   return (
     <DefaultFrame>
       {isLoading ? (
         <></>
       ) : (
-        <Layout>
+        <Layout variants={layoutVariants} initial="init" animate="show">
           <Video>
             <Title>{data.data[currentId].title}</Title>
             <div style={{ borderRadius: "10px", overflow: "hidden" }}>
@@ -40,7 +77,7 @@ export const MV = () => {
             <Icon onClick={() => setIsImg(!isImg)}>
               {isImg ? <AiOutlineAppstore size={30} /> : <BsList size={30} />}
             </Icon>
-            <Lists $isImg={isImg}>
+            <Lists $isImg={isImg} variants={combineVariants} layout className="lists">
               {data.data.map((data, idx) => (
                 <Item key={idx} $isImg={isImg} onClick={() => setCurrentId(idx)}>
                   <img src={`https://img.youtube.com/vi/${data.videoId}/hqdefault.jpg`} />
@@ -59,7 +96,7 @@ export const MV = () => {
   );
 };
 
-const Layout = styled.div`
+const Layout = styled(motion.div)`
   width: 100%;
   display: flex;
   justify-content: center;
@@ -94,7 +131,7 @@ const Icon = styled.div`
   justify-content: flex-end;
   padding: 1rem;
 `;
-const Lists = styled.div`
+const Lists = styled(motion.div)`
   display: ${({ $isImg }) => ($isImg ? "flex" : "grid")};
   flex-direction: column;
   grid-template-columns: repeat(2, 1fr);
@@ -114,7 +151,7 @@ const Lists = styled.div`
   }
 `;
 
-const Item = styled.div`
+const Item = styled(motion.div)`
   flex-direction: ${({ $isImg }) => ($isImg ? "" : "column")};
   gap: 0.5rem;
   img {

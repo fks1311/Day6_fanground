@@ -25,16 +25,14 @@ body {
 `;
 
 root.render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <OpenProvider>
-        <RecoilRoot>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <RouterProvider router={router} />
-          </ThemeProvider>
-        </RecoilRoot>
-      </OpenProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <OpenProvider>
+      <RecoilRoot>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </RecoilRoot>
+    </OpenProvider>
+  </QueryClientProvider>
 );
