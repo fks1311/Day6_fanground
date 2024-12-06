@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
 import { DefaultFrame } from "components/global/DefaultFrame";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { IoIosArrowDropdown, IoIosArrowDropup } from "react-icons/io";
@@ -21,6 +21,7 @@ export const Album_Track = () => {
   const [videoKey, setVideoKey] = useState(curMV); // 비디오 컴포넌트가 상태 변경을 제대로 인식하지 못하여 강제로 재렌더링 하도록 작업 진행
 
   useEffect(() => {
+    playlist && fetchNextPage(); // useInfiniteQuery 트리거
     setCurAccordion(curAccordionHeight?.current?.clientHeight);
     setCurTrackList(curTrackListHeight?.current?.clientHeight);
     setVideoKey(curMV);
@@ -47,22 +48,47 @@ export const Album_Track = () => {
   });
 
   // playlist
-  const { isLoading: plLoading, data: plData } = useQuery({
-    queryKey: ["playlist"],
-    queryFn: async () => {
-      const response = await axios.get(youtubePlaylistApiUrl, { params });
-      const filter = response.data.items.filter((f, i) => f.snippet.title.includes(decodeURI(location.state.album)));
-      return filter;
+  // const { isLoading: plLoading, data: plData } = useQuery({
+  //   queryKey: ["playlist"],
+  //   queryFn: async () => {
+  //     const response = await axios.get(youtubePlaylistApiUrl, { params });
+  //     const filter = response.data.items.filter((f, i) => f.snippet.title.includes(decodeURI(location.state.album)));
+  //     return filter;
+  //   },
+  // });
+
+  // playlist
+  const {
+    isLoading: infinitedLoading,
+    data: infinitedData,
+    fetchNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["infinited"],
+    queryFn: async ({ pageParam = "" }) => {
+      const response = await axios.get(youtubePlaylistApiUrl, {
+        params: {
+          key: process.env.REACT_APP_API_KEY,
+          part: "snippet",
+          channelId: "UCp-pqXsizklX3ZHvLxXyhxw",
+          maxResults: 50,
+          pageToken: pageParam,
+        },
+      });
+      return response.data;
+    },
+    getNextPageParam: (lastPage) => {
+      return lastPage?.nextPageToken;
     },
   });
 
-  const loading = mvLoading || plLoading;
+  const allPlaylists = infinitedData?.pages?.flatMap((res) => res.items);
+  const filterAllPlaylists = allPlaylists?.filter((f) => f.snippet.title.includes(decodeURI(location.state.album)));
 
   // playlistItems
   const plitems = useQueries({
     queries:
-      !plLoading && plData
-        ? plData.map((data) => ({
+      !infinitedLoading && filterAllPlaylists
+        ? filterAllPlaylists.map((data) => ({
             queryKey: [data.id],
             queryFn: async () =>
               await axios.get(youtubePlaylistItemsApiUrl, {
@@ -81,6 +107,8 @@ export const Album_Track = () => {
       };
     },
   });
+
+  const loading = mvLoading || infinitedLoading;
 
   return (
     <DefaultFrame>
