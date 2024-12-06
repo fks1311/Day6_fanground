@@ -2,6 +2,7 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { DefaultFrame } from "components/global/DefaultFrame";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
 export const Album = () => {
@@ -13,12 +14,27 @@ export const Album = () => {
     },
   });
 
+  const layoutVariants = {
+    init: {
+      opacity: 0,
+      y: 20,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 3,
+        delayChildren: 0.5,
+      },
+    },
+  };
+
   return (
     <DefaultFrame>
       {isLoading ? (
         <></>
       ) : (
-        <Layout>
+        <Layout variants={layoutVariants} initial="init" animate="show">
           <span>ALBUM LIST</span>
           <Lists>
             {data.data.map((data, idx) => (
@@ -39,7 +55,7 @@ export const Album = () => {
     </DefaultFrame>
   );
 };
-const Layout = styled.div`
+const Layout = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
