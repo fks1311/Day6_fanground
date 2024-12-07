@@ -7,6 +7,7 @@ import { IoIosArrowDropdown, IoIosArrowDropup } from "react-icons/io";
 import YouTube from "react-youtube";
 import styled from "styled-components";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 export const Album_Track = () => {
   const location = useLocation();
@@ -110,12 +111,27 @@ export const Album_Track = () => {
 
   const loading = mvLoading || infinitedLoading;
 
+  const layoutVariants = {
+    init: {
+      opacity: 0,
+      y: 20,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 3,
+        delayChildren: 0.5,
+      },
+    },
+  };
+
   return (
     <DefaultFrame>
       {loading ? (
         <></>
       ) : (
-        <Layout>
+        <Layout variants={layoutVariants} initial="init" animate="show">
           <BackBtn onClick={() => navigate(-1)}>
             <IoArrowBackCircleOutline size={20} />
             Back
@@ -134,12 +150,12 @@ export const Album_Track = () => {
                 />
               </AlbumMusicVideo>
               <Accordion ref={curAccordionHeight}>
-                <TrackList gradients={mvData[0].gradients} $track={track} ref={curTrackListHeight}>
-                  <Subject gradients={mvData[0].gradients} onClick={() => setTrack(!track)}>
+                <TrackList gradients={mvData[0].gradients} $track={track} ref={curTrackListHeight} layout>
+                  <Subject gradients={mvData[0].gradients} onClick={() => setTrack(!track)} layout>
                     TRACK LIST
                     <IoIosArrowDropdown />
                   </Subject>
-                  <Content>
+                  <Content layout>
                     <Cover src={`https://fks1311.github.io/day6_cdn_data/public${mvData[0].cover}`} $track={track} />
                     <Track>
                       {mvData[0].track_list.map((data, idx) => (
@@ -158,12 +174,13 @@ export const Album_Track = () => {
                   $playlist={playlist}
                   accordion={curAccordion}
                   $trackHeight={curTrackList}
+                  layout
                 >
-                  <Subject gradients={mvData[0].gradients} onClick={() => setPlaylist(!playlist)}>
+                  <Subject gradients={mvData[0].gradients} onClick={() => setPlaylist(!playlist)} layout>
                     Related Playlists
                     <IoIosArrowDropdown />
                   </Subject>
-                  <Content direction={`column`}>
+                  <Content direction={`column`} layout>
                     {plitems.data.map((data, idx) => (
                       <PlayList key={idx} onClick={() => setCurMV(data.snippet.resourceId.videoId)}>
                         <span>{idx + 1}</span>
@@ -181,7 +198,7 @@ export const Album_Track = () => {
     </DefaultFrame>
   );
 };
-const Layout = styled.div`
+const Layout = styled(motion.div)`
   width: 80%;
   display: flex;
   justify-content: center;
@@ -231,13 +248,13 @@ const AlbumMusicVideo = styled.div`
   overflow: hidden;
 `;
 
-const Accordion = styled.div`
+const Accordion = styled(motion.div)`
   flex: 0.5;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 `;
-const Subject = styled.div`
+const Subject = styled(motion.div)`
   position: sticky;
   top: 0;
   display: flex;
@@ -248,14 +265,14 @@ const Subject = styled.div`
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
-const Content = styled.div`
+const Content = styled(motion.div)`
   display: flex;
   flex-direction: ${({ direction }) => direction};
   gap: 1rem;
   padding: 1rem;
 `;
 
-const TrackList = styled.div`
+const TrackList = styled(motion.div)`
   width: 100%;
   max-height: ${({ $track }) => ($track ? `360px` : `50px`)};
   overflow-y: ${({ $track }) => $track && `auto`};
@@ -264,6 +281,7 @@ const TrackList = styled.div`
   color: white;
   border-radius: 10px;
   background-image: ${({ gradients }) => gradients};
+  // transition: 1s ease;
 `;
 const Cover = styled.img`
   max-height: ${({ $track }) => ($track ? `200px` : `0px`)};
@@ -275,7 +293,7 @@ const Track = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
-const Lists = styled.div`
+const Lists = styled(motion.div)`
   display: flex;
   gap: ${({ $gap }) => $gap && `1rem`};
   font-family: ${({ $gap }) => ($gap ? `SUIT-Bold` : `SUIT-Regular`)};
@@ -284,7 +302,7 @@ const Lists = styled.div`
   }
 `;
 
-const RelatedList = styled.div`
+const RelatedList = styled(motion.div)`
   width: 100%;
   max-height: ${({ $playlist, accordion, $trackHeight }) =>
     $playlist ? (accordion > 656 ? `calc(${656 - $trackHeight - 14}px)` : `590px`) : `50px`};
@@ -295,6 +313,7 @@ const RelatedList = styled.div`
   color: white;
   border-radius: 10px;
   background-image: ${({ gradients }) => gradients};
+  // transition: 1s ease;
 `;
 const PlayList = styled.div`
   display: flex;
