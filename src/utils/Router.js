@@ -1,8 +1,9 @@
-import { Home } from "pages/Home";
 import { Loading } from "pages/Loading";
+import { Home } from "pages/Home";
+import { Profile } from "pages/Profile";
+import { MV } from "pages/MV";
 import { Album } from "pages/Album";
 import { Album_Track } from "pages/Album_Track";
-import { MV } from "pages/MV";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <MV />,
+    element: <Profile />,
   },
   {
     path: "/mv",

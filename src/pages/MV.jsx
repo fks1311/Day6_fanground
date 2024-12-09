@@ -77,7 +77,7 @@ export const MV = () => {
             <Icon onClick={() => setIsImg(!isImg)}>
               {isImg ? <AiOutlineAppstore size={30} /> : <BsList size={30} />}
             </Icon>
-            <Lists $isImg={isImg} variants={combineVariants} layout className="lists">
+            <Lists $isImg={isImg} variants={combineVariants} layout>
               {data.data.map((data, idx) => (
                 <Item key={idx} $isImg={isImg} onClick={() => setCurrentId(idx)}>
                   <img src={`https://img.youtube.com/vi/${data.videoId}/hqdefault.jpg`} />

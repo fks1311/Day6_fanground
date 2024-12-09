@@ -9,6 +9,11 @@
 }
 
 @font-face {
+  font-family: "SUIT-SemiBold";
+  src: url("/src/utils/font/SUIT-SemiBold.ttf") format(truetype);
+}
+
+@font-face {
   font-family: "중니좋체";
   src: url("/src/utils/font/Liker.ttf") format(truetype);
 }
