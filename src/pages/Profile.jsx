@@ -7,6 +7,20 @@ import { profiles } from "utils/Profile";
 export const Profile = () => {
   const [curProfile, setCurProfile] = useState(undefined);
 
+  const layoutVariants = {
+    init: {
+      opacity: 0,
+      y: 15,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 3,
+      },
+    },
+  };
+
   const postVariants = {
     init: {
       display: "flex",
@@ -49,7 +63,7 @@ export const Profile = () => {
 
   return (
     <DefaultFrame>
-      <Layout>
+      <Layout variants={layoutVariants} initial="init" animate="show">
         {profiles.map((data, idx) => (
           <React.Fragment key={idx}>
             <Post
