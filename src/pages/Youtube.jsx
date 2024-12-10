@@ -1,13 +1,15 @@
-import { useQueries } from "@tanstack/react-query";
 import axios from "axios";
-import { DefaultFrame } from "components/global/DefaultFrame";
-import { motion } from "framer-motion";
 import { useState } from "react";
+import { useQueries } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import styled from "styled-components";
+import { IoIosArrowDropleft, IoIosArrowDropright, IoIosArrowDropdown } from "react-icons/io";
+import { DefaultFrame } from "components/global/DefaultFrame";
 import { useInfiniteQueryYoutube } from "utils/collectFunctions";
 
 export const Youtube = () => {
   const [page, setPage] = useState(0);
+  const [trigger, setTrigger] = useState(0);
   const youtubePlaylistsApiUrl = "https://www.googleapis.com/youtube/v3/playlists";
   const youtubeChnnelsApiUrl = "https://www.googleapis.com/youtube/v3/channels";
   const forHandle = [
@@ -63,18 +65,63 @@ export const Youtube = () => {
 
   const flatDay6 = day6InfinitedData?.pages?.flatMap((res) => res?.items || []) || [];
   const flatPark = parkInfinitedData?.pages?.flatMap((res) => res?.items || []) || [];
-  const assign = [[...flatDay6], [...flatPark]];
+  const assignArray = [[...flatDay6], [...flatPark]];
+  const curPlaylistCounts = [flatDay6.length, flatPark.length];
+  const totalPlaylistCounts = [
+    day6InfinitedData?.pages?.[0].pageInfo?.totalResults, // 총 카운트
+    parkInfinitedData?.pages?.[0].pageInfo?.totalResults,
+  ];
+
+  const onClickRefetch = () => {
+    page === 0 ? day6Fetch() : parkFetch();
+  };
 
   const loading = day6InfinitedLoading || parkInfinitedLoading;
+
+  const layoutVariants = {
+    init: {
+      opacity: 0,
+      y: 20,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 3,
+      },
+    },
+  };
+
+  const playlistsVariants = {
+    init: {
+      opacity: 0,
+    },
+    show: {
+      opacity: 1,
+      visibility: "visible",
+      transition: {
+        duration: 3,
+      },
+    },
+  };
 
   return (
     <DefaultFrame>
       {loading ? (
         <></>
       ) : (
-        <Layout>
+        <Layout variants={layoutVariants} initial="init" animate="show">
           <SlideChannelFrame>
-            <SlideArrowBtn onClick={() => setPage(0)} />
+            {page !== 0 && (
+              <SlideArrowBtn
+                onClick={() => {
+                  setPage((prev) => prev - 1);
+                  setTrigger((prev) => prev + 1);
+                }}
+              >
+                <IoIosArrowDropleft size={20} />
+              </SlideArrowBtn>
+            )}
             <Content>
               <ChannelInfo>
                 <img src={channels.data[page].snippet.thumbnails.default?.url} />
@@ -89,8 +136,8 @@ export const Youtube = () => {
                   </div>
                 </div>
               </ChannelInfo>
-              <PlayLists>
-                {assign[page].map((item, idx) => (
+              <PlayLists key={trigger} variants={playlistsVariants} initial="init" animate="show">
+                {assignArray[page].map((item, idx) => (
                   <div key={idx}>
                     <div className="img-out-frame">
                       <img src={item.snippet.thumbnails.medium?.url} />
@@ -99,47 +146,35 @@ export const Youtube = () => {
                   </div>
                 ))}
               </PlayLists>
-              <RefetchBtnFrame>
-                <SlideArrowBtn />
-              </RefetchBtnFrame>
+              {totalPlaylistCounts[page] !== curPlaylistCounts[page] && (
+                <RefetchBtnFrame onClick={onClickRefetch}>
+                  <IoIosArrowDropdown size={20} />
+                </RefetchBtnFrame>
+              )}
             </Content>
-            <SlideArrowBtn onClick={() => setPage(1)} />
+            {forHandle.length !== page + 1 && (
+              <SlideArrowBtn
+                onClick={() => {
+                  setPage((prev) => prev + 1);
+                  setTrigger((prev) => prev + 1);
+                }}
+              >
+                <IoIosArrowDropright size={20} />
+              </SlideArrowBtn>
+            )}
           </SlideChannelFrame>
-          <SlideBtnFrame>
+          <SlideBottomBtnFrame>
             {forHandle.map((data, idx) => (
-              <div key={idx} onClick={() => setPage(idx)} />
+              <BottomBtn
+                key={idx}
+                $curPage={idx === page}
+                onClick={() => {
+                  setPage(idx);
+                  setTrigger((prev) => prev + 1);
+                }}
+              />
             ))}
-          </SlideBtnFrame>
-          {/* <Layout>
-            {channels.data.map((channel, idx) => (
-              <Channel key={idx}>
-                <ChannelInfo>
-                  <img src={channel.snippet.thumbnails.default?.url} />
-                  <div>
-                    <p className="title">{channel.snippet.title}</p>
-                    <div>
-                      <p>{channel.snippet.customUrl}</p>
-                      <p>
-                        <span>구독자 {channel.statistics.subscriberCount}</span>
-                        <span>동영상 {channel.statistics.videoCount}</span>
-                      </p>
-                    </div>
-                  </div>
-                </ChannelInfo>
-                <Playlists className="playlists">
-                  {assign.map(
-                    (data, idx) =>
-                      channel.id === data.snippet.channelId && (
-                        <div key={idx}>
-                          <img src={data.snippet.thumbnails.medium?.url} />
-                          <p>{data.snippet.title}</p>
-                        </div>
-                      )
-                  )}
-                </Playlists>
-              </Channel>
-            ))}
-          </Layout> */}
+          </SlideBottomBtnFrame>
         </Layout>
       )}
     </DefaultFrame>
@@ -152,7 +187,7 @@ const Layout = styled(motion.div)`
   border-radius: 10px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `;
-const SlideChannelFrame = styled.div`
+const SlideChannelFrame = styled(motion.div)`
   height: 95%;
   display: flex;
   justify-content: space-between;
@@ -166,18 +201,11 @@ const RefetchBtnFrame = styled.div`
   display: flex;
   justify-content: center;
 `;
-const SlideArrowBtn = styled.div`
-  height: 1.5rem;
-  width: 1.5rem;
-  border-radius: 50%;
-  background-color: #009990;
-`;
 const Content = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 1rem;
   padding: 1rem;
   border-radius: 10px;
@@ -208,7 +236,7 @@ const ChannelInfo = styled.div`
   font-size: 14px;
   font-family: SUIT-Regular;
 `;
-const PlayLists = styled.div`
+const PlayLists = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
@@ -222,16 +250,20 @@ const PlayLists = styled.div`
   }
 `;
 
+// common button
+const SlideArrowBtn = styled.div``;
+
 // bottom-slide button
-const SlideBtnFrame = styled.div`
+const SlideBottomBtnFrame = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  div {
-    height: 1.5rem;
-    width: 1.5rem;
-    border-radius: 50%;
-    background-color: #009990;
-  }
+`;
+
+const BottomBtn = styled.div`
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 50%;
+  background-color: ${({ $curPage }) => ($curPage ? `#3C3D37` : `rgb(60, 61, 55, 0.3)`)};
 `;

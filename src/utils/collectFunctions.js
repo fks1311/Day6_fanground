@@ -25,8 +25,10 @@ export const useInfiniteQueryYoutube = (api, params, queryKey) => {
     queryKey: [`${queryKey}`],
     queryFn: async ({ pageParam = "" }) => {
       const response = await axios.get(api, {
-        params: params,
-        pageToken: pageParam,
+        params: {
+          ...params,
+          pageToken: pageParam,
+        },
       });
       return response.data;
     },
