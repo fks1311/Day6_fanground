@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
 import { DefaultFrame } from "components/global/DefaultFrame";
@@ -6,10 +7,10 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { IoIosArrowDropdown, IoIosArrowDropup } from "react-icons/io";
 import YouTube from "react-youtube";
 import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useInfiniteQueryYoutube, useMusicVideoJsonList } from "utils/collectFunctions";
 
-export const Album_Track = () => {
+export const Playlist_Track = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [curMV, setCurMV] = useState();
@@ -29,13 +30,7 @@ export const Album_Track = () => {
   }, [track, playlist, curMV]);
 
   const youtubePlaylistItemsApiUrl = "https://www.googleapis.com/youtube/v3/playlistItems";
-  const youtubePlaylistApiUrl = "https://www.googleapis.com/youtube/v3/playlists";
-  const params = {
-    key: process.env.REACT_APP_API_KEY,
-    part: "snippet",
-    channelId: "UCp-pqXsizklX3ZHvLxXyhxw",
-    maxResults: 50,
-  };
+  const youtubePlaylistsApiUrl = "https://www.googleapis.com/youtube/v3/playlists";
 
   // mv
   const { isLoading: mvLoading, data: mvData } = useQuery({
@@ -48,39 +43,18 @@ export const Album_Track = () => {
     },
   });
 
-  // playlist
-  // const { isLoading: plLoading, data: plData } = useQuery({
-  //   queryKey: ["playlist"],
-  //   queryFn: async () => {
-  //     const response = await axios.get(youtubePlaylistApiUrl, { params });
-  //     const filter = response.data.items.filter((f, i) => f.snippet.title.includes(decodeURI(location.state.album)));
-  //     return filter;
-  //   },
-  // });
-
-  // playlist
+  // playlists
+  const playListParams = {
+    key: process.env.REACT_APP_API_KEY,
+    part: "snippet",
+    channelId: "UCp-pqXsizklX3ZHvLxXyhxw",
+    maxResults: 50,
+  };
   const {
     isLoading: infinitedLoading,
     data: infinitedData,
     fetchNextPage,
-  } = useInfiniteQuery({
-    queryKey: ["infinited"],
-    queryFn: async ({ pageParam = "" }) => {
-      const response = await axios.get(youtubePlaylistApiUrl, {
-        params: {
-          key: process.env.REACT_APP_API_KEY,
-          part: "snippet",
-          channelId: "UCp-pqXsizklX3ZHvLxXyhxw",
-          maxResults: 50,
-          pageToken: pageParam,
-        },
-      });
-      return response.data;
-    },
-    getNextPageParam: (lastPage) => {
-      return lastPage?.nextPageToken;
-    },
-  });
+  } = useInfiniteQueryYoutube(youtubePlaylistsApiUrl, playListParams, "infinited");
 
   const allPlaylists = infinitedData?.pages?.flatMap((res) => res.items);
   const filterAllPlaylists = allPlaylists?.filter((f) => f.snippet.title.includes(decodeURI(location.state.album)));

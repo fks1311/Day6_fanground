@@ -1,18 +1,11 @@
-import axios from "axios";
 import { NavLink } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { DefaultFrame } from "components/global/DefaultFrame";
 import { motion } from "framer-motion";
 import styled from "styled-components";
+import { DefaultFrame } from "components/global/DefaultFrame";
+import { useMusicVideoJsonList } from "utils/collectFunctions";
 
 export const Album = () => {
-  const { isLoading, data } = useQuery({
-    queryKey: ["day6"],
-    queryFn: async () => {
-      const response = await axios.get("https://fks1311.github.io/day6_cdn_data/public/mv_list.json");
-      return response;
-    },
-  });
+  const { isLoading, data } = useMusicVideoJsonList("day6");
 
   const layoutVariants = {
     init: {

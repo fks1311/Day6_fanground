@@ -3,7 +3,8 @@ import { Home } from "pages/Home";
 import { Profile } from "pages/Profile";
 import { MV } from "pages/MV";
 import { Album } from "pages/Album";
-import { Album_Track } from "pages/Album_Track";
+import { Playlist_Track } from "pages/Playlist_Track";
+import { Youtube } from "pages/Youtube";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -29,11 +30,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/album/:id",
-    element: <Album_Track />,
+    element: <Playlist_Track />,
   },
   {
     path: "/youtube",
-    element: <MV />,
+    element: <Youtube />,
   },
   {
     path: "/search",

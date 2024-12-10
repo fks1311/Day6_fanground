@@ -1,23 +1,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import styled from "styled-components";
 import YouTube from "react-youtube";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { BsList } from "react-icons/bs";
 import { DefaultFrame } from "components/global/DefaultFrame";
+import { useMusicVideoJsonList } from "utils/collectFunctions";
 
 export const MV = () => {
   const [isImg, setIsImg] = useState(true);
   const [currentId, setCurrentId] = useState(0);
-  const { isLoading, data } = useQuery({
-    queryKey: ["day6"],
-    queryFn: async () => {
-      const response = await axios.get("https://fks1311.github.io/day6_cdn_data/public/mv_list.json");
-      return response;
-    },
-  });
+  const { isLoading, data } = useMusicVideoJsonList("day6");
 
   const layoutVariants = {
     init: {
