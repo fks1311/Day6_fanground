@@ -227,6 +227,7 @@ const ChannelInfo = styled.div`
     font-family: SUIT-SemiBold;
   }
   img {
+    width: 100px;
     border-radius: 50%;
   }
   div {
