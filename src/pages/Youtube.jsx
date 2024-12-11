@@ -105,7 +105,6 @@ export const Youtube = () => {
       },
     },
   };
-
   return (
     <DefaultFrame>
       {loading ? (
@@ -139,7 +138,7 @@ export const Youtube = () => {
               </ChannelInfo>
               <PlayLists key={trigger} variants={playlistsVariants} initial="init" animate="show">
                 {assignArray[page].map((item, idx) => (
-                  <PlayItem key={idx}>
+                  <PlayItem key={idx} to={`/watch/${item.id}`}>
                     <div className="img-out-frame">
                       <img src={item.snippet.thumbnails.medium?.url} />
                     </div>
