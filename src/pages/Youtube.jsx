@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { useQueries } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import styled from "styled-components";
@@ -138,12 +139,12 @@ export const Youtube = () => {
               </ChannelInfo>
               <PlayLists key={trigger} variants={playlistsVariants} initial="init" animate="show">
                 {assignArray[page].map((item, idx) => (
-                  <div key={idx}>
+                  <PlayItem key={idx}>
                     <div className="img-out-frame">
                       <img src={item.snippet.thumbnails.medium?.url} />
                     </div>
                     <p>{item.snippet.title}</p>
-                  </div>
+                  </PlayItem>
                 ))}
               </PlayLists>
               {totalPlaylistCounts[page] !== curPlaylistCounts[page] && (
@@ -248,6 +249,15 @@ const PlayLists = styled(motion.div)`
     border-radius: 10px;
     overflow: hidden;
   }
+`;
+const PlayItem = styled(NavLink)`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 14px;
+  font-family: SUIT-SemiBold;
+  text-decoration-line: none;
+  color: black;
 `;
 
 // common button
