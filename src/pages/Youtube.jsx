@@ -199,7 +199,7 @@ const SlideChannelFrame = styled(motion.div)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  // gap: 1rem;
   padding: 1rem;
 `;
 const RefetchBtnFrame = styled.div`
@@ -221,6 +221,7 @@ const ChannelInfo = styled.div`
   display: flex;
   gap: 1rem;
   height: 100px;
+  margin-bottom: 1rem;
   .title {
     font-size: 40px;
     font-family: SUIT-SemiBold;
@@ -275,11 +276,12 @@ const SlideBottomBtnFrame = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  padding: 0px 1rem;
 `;
 
 const BottomBtn = styled.div`
-  height: 0.5rem;
-  width: 0.5rem;
+  height: 0.8rem;
+  width: 0.8rem;
   border-radius: 50%;
   background-color: ${({ $curPage }) => ($curPage ? `#3C3D37` : `rgb(60, 61, 55, 0.3)`)};
 `;
