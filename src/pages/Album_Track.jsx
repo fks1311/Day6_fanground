@@ -1,16 +1,16 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { DefaultFrame } from "components/global/DefaultFrame";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { IoIosArrowDropdown, IoIosArrowDropup } from "react-icons/io";
 import YouTube from "react-youtube";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useInfiniteQueryYoutube, useMusicVideoJsonList } from "utils/collectFunctions";
+import { useInfiniteQueryYoutube } from "utils/collectFunctions";
 
-export const Playlist_Track = () => {
+export const Album_Track = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [curMV, setCurMV] = useState();

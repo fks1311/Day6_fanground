@@ -128,7 +128,6 @@ const Lists = styled(motion.div)`
   display: ${({ $isImg }) => ($isImg ? "flex" : "grid")};
   flex-direction: column;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
   padding: 1rem;
   div {
     display: flex;
@@ -146,6 +145,7 @@ const Lists = styled(motion.div)`
 
 const Item = styled(motion.div)`
   flex-direction: ${({ $isImg }) => ($isImg ? "" : "column")};
+  padding: 0.8rem;
   gap: 0.5rem;
   img {
     height: 80px;
@@ -157,5 +157,9 @@ const Item = styled(motion.div)`
     flex-direction: column;
     align-items: flex-start;
     // gap: 0.2rem;
+  }
+  &:hover {
+    border-radius: 10px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   }
 `;
