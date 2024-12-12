@@ -6,6 +6,7 @@ import { Album } from "pages/Album";
 import { Album_Track } from "pages/Album_Track";
 import { Youtube } from "pages/Youtube";
 import { Playlists_Track } from "pages/Playlists_Track";
+import { Search } from "pages/Search";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/search",
-    element: <MV />,
+    element: <Search />,
   },
 ]);
 
