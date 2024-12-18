@@ -19,7 +19,6 @@ export const NavView = ({ isOpen, setIsOpen }) => {
     { id: "MV", link: "/mv" },
     { id: "Album", link: "/album" },
     { id: "Youtube", link: "/youtube" },
-    { id: "Search", link: "/search" },
   ];
   const [isLoad, setIsLoad] = useState(true);
   const [showItems, setShowItems] = useState(false);

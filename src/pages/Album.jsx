@@ -63,6 +63,7 @@ const Lists = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2.5rem;
+  padding: 1rem;
   img {
     height: 300px;
     width: 300px;

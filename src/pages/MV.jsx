@@ -56,11 +56,11 @@ export const MV = () => {
         <Layout variants={layoutVariants} initial="init" animate="show">
           <Video>
             <Title>{data.data[currentId].title}</Title>
-            <div style={{ borderRadius: "10px", overflow: "hidden" }}>
+            <div style={{ borderRadius: "10px", overflow: "hidden", width: "100%" }}>
               <YouTube
                 videoId={data.data[currentId].videoId}
                 opts={{
-                  width: "1200",
+                  width: "100%",
                   height: "700",
                 }}
               />
@@ -90,7 +90,7 @@ export const MV = () => {
 };
 
 const Layout = styled(motion.div)`
-  width: 100%;
+  width: 80%;
   display: flex;
   justify-content: center;
   gap: 2rem;
@@ -98,8 +98,7 @@ const Layout = styled(motion.div)`
 `;
 
 const Video = styled.div`
-  // flex: 3;
-
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -111,12 +110,9 @@ const Title = styled.div`
 `;
 
 const VideoList = styled.div`
-  // flex: 0.8;
-
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  // padding: 2rem;
 `;
 
 const Icon = styled.div`
@@ -156,7 +152,6 @@ const Item = styled(motion.div)`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    // gap: 0.2rem;
   }
   &:hover {
     border-radius: 10px;
