@@ -1,17 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
-import 성진 from "assets/성진.jpeg";
-import 영케이 from "assets/영케이.jpeg";
-import 원필 from "assets/원필.jpeg";
-import 도운 from "assets/도운.jpeg";
+import sj from "assets/sj.jpeg";
+import yk from "assets/yk.jpeg";
+import wp from "assets/wp.jpeg";
+import dw from "assets/dw.jpeg";
 
 export const AnimateMember = ({ animateMember, setAnimateMember }) => {
-  const profile_img = [
-    { img: 성진 },
-    { img: 영케이 },
-    { img: 원필 },
-    { img: 도운 },
-  ];
+  const profile_img = [{ img: sj }, { img: yk }, { img: wp }, { img: dw }];
 
   const parentVariants = {
     init: { opacity: 0 },
