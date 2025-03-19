@@ -18,10 +18,16 @@ export const DefaultFrame = forwardRef((props, ref) => {
 });
 
 const Frame = styled(motion.div)`
-  height: ${window.innerHeight}px;
   position: relative;
   display: flex;
   justify-content: center;
+  @media ${({
+      theme: {
+        media: { desktop },
+      },
+    }) => desktop} {
+    height: ${window.innerHeight}px;
+  }
 `;
 
 const Layout = styled.div`

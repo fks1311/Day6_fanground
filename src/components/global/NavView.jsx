@@ -124,8 +124,7 @@ const CloseIcon = styled.div`
   display: flex;
   justify-content: flex-end;
   svg {
-    margin-top: 1rem;
-    margin-right: 4rem;
+    margin: 0.5rem;
     cursor: pointer;
   }
 `;
@@ -158,6 +157,14 @@ const SocialIcons = styled(motion.div)`
 const Icon = styled(motion.img)`
   height: 25px;
   width: 25px;
+  @media ${({
+      theme: {
+        media: { tablet },
+      },
+    }) => tablet} {
+    height: 20px;
+    width: 20px;
+  }
 `;
 const Item = styled(motion.div)`
   width: 100%;

@@ -31,9 +31,7 @@ export const Home = () => {
 
   return (
     <Layout>
-      {/* <Confetti width={width} height={height} numberOfPieces={2000} recycle={false} tweenDuration={10000} /> */}
       <Nav />
-      {/* <Trophy>🏆 데식이들 대상을 축하합니다 🏆</Trophy> */}
       {isOpen && <NavView isOpen={isOpen} setIsOpen={setIsOpen} />}
       <Slider {...settings}>
         {images.map((data, idx) => (

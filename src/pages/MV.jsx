@@ -58,6 +58,7 @@ export const MV = () => {
             <Title>{data.data[currentId].title}</Title>
             <div style={{ borderRadius: "10px", overflow: "hidden", width: "100%" }}>
               <YouTube
+                className="youtube"
                 videoId={data.data[currentId].videoId}
                 opts={{
                   width: "100%",
@@ -95,6 +96,13 @@ const Layout = styled(motion.div)`
   justify-content: center;
   gap: 2rem;
   padding: 2rem;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    flex-direction: column;
+  }
 `;
 
 const Video = styled.div`
@@ -102,6 +110,35 @@ const Video = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    .youtube {
+      width: 75vw;
+      height: 60vh;
+    }
+  }
+  @media ${({
+      theme: {
+        media: { tablet },
+      },
+    }) => tablet} {
+    .youtube {
+      width: 70vw;
+      height: 50vh;
+    }
+  }
+  @media ${({
+      theme: {
+        media: { smaller },
+      },
+    }) => smaller} {
+    .youtube {
+      height: 40vh;
+    }
+  }
 `;
 const Title = styled.div`
   padding: 2rem;
@@ -113,12 +150,25 @@ const VideoList = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    overflow: hidden;
+  }
 `;
 
 const Icon = styled.div`
   display: flex;
   justify-content: flex-end;
   padding: 1rem;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+  }
 `;
 const Lists = styled(motion.div)`
   display: ${({ $isImg }) => ($isImg ? "flex" : "grid")};
@@ -136,6 +186,15 @@ const Lists = styled(motion.div)`
   span {
     font-size: 12px;
     font-family: SUIT-Regular;
+  }
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    flex-direction: row;
+    overflow-x: scroll;
+    grid-template-columns: repeat(5, 1fr);
   }
 `;
 
