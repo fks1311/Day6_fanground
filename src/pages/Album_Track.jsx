@@ -220,6 +220,10 @@ const AlbumMusicVideo = styled.div`
   flex: 1;
   border-radius: 15px;
   overflow: hidden;
+  .youtube {
+    // width: 70vw;
+    // height: 60vh;
+  }
 `;
 
 const Accordion = styled(motion.div)`
@@ -258,7 +262,7 @@ const TrackList = styled(motion.div)`
   // transition: 1s ease;
 `;
 const Cover = styled.img`
-  max-height: ${({ $track }) => ($track ? `200px` : `0px`)};
+  max-height: ${({ $track }) => ($track ? `50%` : `0px`)};
   width: 45%;
   border-radius: 10px;
 `;
@@ -269,10 +273,12 @@ const Track = styled.div`
 `;
 const Lists = styled(motion.div)`
   display: flex;
-  gap: ${({ $gap }) => $gap && `1rem`};
+  flex-wrap: wrap;
+  gap: ${({ $gap }) => $gap && `0.5rem`};
   font-family: ${({ $gap }) => ($gap ? `SUIT-Bold` : `SUIT-Regular`)};
   span {
-    font-size: 14px;
+    font-size: 0.8rem;
+    line-height: 1rem;
   }
 `;
 
@@ -293,7 +299,7 @@ const PlayList = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-  font-size: 14px;
+  font-size: 0.8rem;
   font-family: SUIT-Regular;
   line-height: 1.5rem;
   img {
