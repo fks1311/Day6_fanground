@@ -3,9 +3,11 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 import { DefaultFrame } from "components/global/DefaultFrame";
 import { useMusicVideoJsonList } from "utils/collectFunctions";
+import { useWindowSize } from "react-use";
 
 export const Album = () => {
   const { isLoading, data } = useMusicVideoJsonList("day6");
+  const windowSize = useWindowSize();
 
   const layoutVariants = {
     init: {
@@ -29,7 +31,7 @@ export const Album = () => {
       ) : (
         <Layout variants={layoutVariants} initial="init" animate="show">
           <span>ALBUM LIST</span>
-          <Lists>
+          <Lists window={windowSize}>
             {data.data.map((data, idx) => (
               <Cover
                 key={idx}
@@ -60,13 +62,14 @@ const Layout = styled(motion.div)`
 `;
 
 const Lists = styled.div`
+  width: ${({ window }) => `calc(${window.width}px - 100px)`};
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.5rem;
   padding: 1rem;
   img {
     height: 300px;
-    width: 300px;
+    // width: 300px;
   }
 `;
 
