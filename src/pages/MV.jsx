@@ -194,7 +194,7 @@ const Lists = styled(motion.div)`
     }) => laptop} {
     flex-direction: row;
     overflow-x: scroll;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 `;
 
