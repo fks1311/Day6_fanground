@@ -69,7 +69,7 @@ const Lists = styled.div`
   padding: 1rem;
   img {
     height: 300px;
-    // width: 300px;
+    border-radius: 10px;
   }
 `;
 
