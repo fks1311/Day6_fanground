@@ -1,8 +1,8 @@
 const deviceSizes = {
   smaller: `576px`,
-  tablet: `768px`,
-  laptop: `1279px`,
-  desktop: `1280px`,
+  tablet: `980px`,
+  laptop: `1239px`,
+  desktop: `1240px`,
 };
 
 const media = {
