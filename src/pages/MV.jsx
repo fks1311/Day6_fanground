@@ -6,11 +6,20 @@ import { AiOutlineAppstore } from "react-icons/ai";
 import { BsList } from "react-icons/bs";
 import { DefaultFrame } from "components/global/DefaultFrame";
 import { useMusicVideoJsonList } from "utils/collectFunctions";
+import { useWindowSize } from "react-use";
 
+/**
+ * media
+ * 1240 : desktop
+ * 1239 : laptop
+ *
+ */
 export const MV = () => {
   const [isImg, setIsImg] = useState(true);
   const [currentId, setCurrentId] = useState(0);
   const { isLoading, data } = useMusicVideoJsonList("day6");
+  const windowsize = useWindowSize();
+  console.log(windowsize);
 
   const layoutVariants = {
     init: {
@@ -62,7 +71,7 @@ export const MV = () => {
                 videoId={data.data[currentId].videoId}
                 opts={{
                   width: "100%",
-                  height: "700",
+                  height: windowsize.width >= 1240 ? "700" : "480",
                 }}
               />
             </div>
@@ -96,12 +105,9 @@ const Layout = styled(motion.div)`
   justify-content: center;
   gap: 2rem;
   padding: 2rem;
-  @media ${({
-      theme: {
-        media: { laptop },
-      },
-    }) => laptop} {
+  @media (max-width: 1239px) {
     flex-direction: column;
+    gap: 0rem;
   }
 `;
 
@@ -110,33 +116,13 @@ const Video = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media ${({
-      theme: {
-        media: { laptop },
-      },
-    }) => laptop} {
+  .youtube {
+    height: 75vh;
+  }
+  @media (max-width: 1239px) {
     .youtube {
       width: 75vw;
-      height: 60vh;
-    }
-  }
-  @media ${({
-      theme: {
-        media: { tablet },
-      },
-    }) => tablet} {
-    .youtube {
-      width: 70vw;
       height: 50vh;
-    }
-  }
-  @media ${({
-      theme: {
-        media: { smaller },
-      },
-    }) => smaller} {
-    .youtube {
-      height: 40vh;
     }
   }
 `;
@@ -150,11 +136,7 @@ const VideoList = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  @media ${({
-      theme: {
-        media: { laptop },
-      },
-    }) => laptop} {
+  @media (max-width: 1239px) {
     overflow: hidden;
   }
 `;
@@ -163,12 +145,6 @@ const Icon = styled.div`
   display: flex;
   justify-content: flex-end;
   padding: 1rem;
-  @media ${({
-      theme: {
-        media: { laptop },
-      },
-    }) => laptop} {
-  }
 `;
 const Lists = styled(motion.div)`
   display: ${({ $isImg }) => ($isImg ? "flex" : "grid")};
@@ -178,7 +154,7 @@ const Lists = styled(motion.div)`
   div {
     display: flex;
   }
-  font-size: 14px;
+  font-size: 0.8rem;
   font-family: SUIT-Bold;
   line-height: 1.3rem;
   p {
@@ -187,11 +163,7 @@ const Lists = styled(motion.div)`
     font-size: 12px;
     font-family: SUIT-Regular;
   }
-  @media ${({
-      theme: {
-        media: { laptop },
-      },
-    }) => laptop} {
+  @media (max-width: 1239px) {
     flex-direction: row;
     overflow-x: scroll;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
