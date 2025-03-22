@@ -9,6 +9,7 @@ import YouTube from "react-youtube";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useInfiniteQueryYoutube } from "utils/collectFunctions";
+import useWindowsize from "utils/useWindowsize";
 
 export const Album_Track = () => {
   const location = useLocation();
@@ -21,6 +22,7 @@ export const Album_Track = () => {
   const [curAccordion, setCurAccordion] = useState();
   const [curTrackList, setCurTrackList] = useState();
   const [videoKey, setVideoKey] = useState(curMV); // 비디오 컴포넌트가 상태 변경을 제대로 인식하지 못하여 강제로 재렌더링 하도록 작업 진행
+  const windowsize = useWindowsize();
 
   useEffect(() => {
     playlist && fetchNextPage(); // useInfiniteQuery 트리거
@@ -116,10 +118,11 @@ export const Album_Track = () => {
               <AlbumMusicVideo>
                 <YouTube
                   key={videoKey}
+                  className="youtube"
                   videoId={curMV}
                   opts={{
                     width: "100%",
-                    height: "650",
+                    height: windowsize?.width <= 580 ? "450" : "650",
                   }}
                 />
               </AlbumMusicVideo>
@@ -129,7 +132,7 @@ export const Album_Track = () => {
                     TRACK LIST
                     <IoIosArrowDropdown />
                   </Subject>
-                  <Content layout>
+                  <Content layout direction={windowsize <= 980 ? "row" : undefined}>
                     <Cover src={`https://fks1311.github.io/day6_cdn_data/public${mvData[0].cover}`} $track={track} />
                     <Track>
                       {mvData[0].track_list.map((data, idx) => (
@@ -182,8 +185,11 @@ const Layout = styled(motion.div)`
 const BackBtn = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  // align-items: center;
+  align-items: flex-start;
+  // justify-content: center;
+  justify-content: flex-start;
+  margin-top: 2rem;
   gap: 0.5rem;
   font-family: SUIT-Regular;
   font-size: 1rem;
@@ -215,14 +221,49 @@ const AlbumInfo = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  @media ${({
+      theme: {
+        media: { tablet },
+      },
+    }) => tablet} {
+    flex-direction: column;
+    margin-bottom: 2rem;
+  }
 `;
 const AlbumMusicVideo = styled.div`
   flex: 1;
   border-radius: 15px;
   overflow: hidden;
-  .youtube {
-    // width: 70vw;
-    // height: 60vh;
+  width: 70vw;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    width: 60vw;
+    .youtube {
+      width: 60vw;
+    }
+  }
+  @media ${({
+      theme: {
+        media: { tablet },
+      },
+    }) => tablet} {
+    width: 70vw;
+    .youtube {
+      width: 70vw;
+    }
+  }
+  @media ${({
+      theme: {
+        media: { smaller },
+      },
+    }) => smaller} {
+    height: 50vh;
+    .youtube {
+      height: 50vh;
+    }
   }
 `;
 
@@ -248,6 +289,21 @@ const Content = styled(motion.div)`
   flex-direction: ${({ direction }) => direction};
   gap: 1rem;
   padding: 1rem;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    flex-direction: column;
+  }
+  @media ${({
+      theme: {
+        media: { tablet },
+      },
+    }) => tablet} {
+    flex-direction: ${({ direction }) => direction};
+    gap: 2rem;
+  }
 `;
 
 const TrackList = styled(motion.div)`
@@ -259,12 +315,26 @@ const TrackList = styled(motion.div)`
   color: white;
   border-radius: 10px;
   background-image: ${({ gradients }) => gradients};
-  // transition: 1s ease;
 `;
 const Cover = styled.img`
   max-height: ${({ $track }) => ($track ? `50%` : `0px`)};
   width: 45%;
   border-radius: 10px;
+  @media ${({
+      theme: {
+        media: { tablet },
+      },
+    }) => tablet} {
+    height: 55%;
+    width: 25%;
+  }
+  @media ${({
+      theme: {
+        media: { smaller },
+      },
+    }) => smaller} {
+    height: 35%;
+  }
 `;
 const Track = styled.div`
   display: flex;
