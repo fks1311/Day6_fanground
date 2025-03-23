@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef } from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { Nav } from "./Nav";
@@ -9,11 +9,16 @@ export const DefaultFrame = forwardRef((props, ref) => {
   const { isOpen, setIsOpen } = useOpenContext(false);
 
   return (
-    <Frame>
-      <Nav />
-      {isOpen && <NavView isOpen={isOpen} setIsOpen={setIsOpen} />}
-      <Layout>{props.children}</Layout>
-    </Frame>
+    <>
+      {isOpen ? (
+        <NavView isOpen={isOpen} setIsOpen={setIsOpen} />
+      ) : (
+        <Frame>
+          <Nav />
+          <Layout>{props.children}</Layout>
+        </Frame>
+      )}
+    </>
   );
 });
 
