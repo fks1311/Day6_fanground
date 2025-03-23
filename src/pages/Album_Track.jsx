@@ -126,7 +126,7 @@ export const Album_Track = () => {
                   }}
                 />
               </AlbumMusicVideo>
-              <Accordion ref={curAccordionHeight}>
+              <Accordion ref={curAccordionHeight} className="acc">
                 <TrackList gradients={mvData[0].gradients} $track={track} ref={curTrackListHeight} layout>
                   <Subject gradients={mvData[0].gradients} onClick={() => setTrack(!track)} layout>
                     TRACK LIST
@@ -217,6 +217,7 @@ const AlbumTitle = styled.div`
 const AlbumInfo = styled.div`
   display: flex;
   gap: 1.5rem;
+  margin-bottom: 2rem;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
     display: none;
@@ -227,7 +228,6 @@ const AlbumInfo = styled.div`
       },
     }) => tablet} {
     flex-direction: column;
-    margin-bottom: 2rem;
   }
 `;
 const AlbumMusicVideo = styled.div`
@@ -250,9 +250,9 @@ const AlbumMusicVideo = styled.div`
         media: { tablet },
       },
     }) => tablet} {
-    width: 70vw;
+    width: 75vw;
     .youtube {
-      width: 70vw;
+      width: 75vw;
     }
   }
   @media ${({
@@ -272,6 +272,7 @@ const Accordion = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-bottom: 2rem;
 `;
 const Subject = styled(motion.div)`
   position: sticky;
