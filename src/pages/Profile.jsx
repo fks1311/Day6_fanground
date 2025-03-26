@@ -103,7 +103,8 @@ const Content = styled(motion.div)`
   padding: 0.5rem;
   font-family: SUIT-Regular;
   border-radius: 10px;
-  background-color: #4f959d;
+  // background-color: #4f959d;
+  background-image: linear-gradient(153deg, #2d3c59 0%, #212e40 16%, #326c73 56%, #4e9da6 75%, #73c6d9 100%);
   z-index: ${({ $cur, $idx }) => ($cur === $idx ? "2" : "0")};
   transition-duration: 1s;
   @media ${({ theme }) => theme.media.laptop}, ${({ theme }) => theme.media.desktop} {
