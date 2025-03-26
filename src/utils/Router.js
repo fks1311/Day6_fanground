@@ -1,7 +1,7 @@
 import { Loading } from "pages/Loading";
 import { Home } from "pages/Home";
-import { Profile } from "pages/Profile";
 import { MV } from "pages/MV";
+import { Profile } from "pages/Profile";
 import { Album } from "pages/Album";
 import { Album_Track } from "pages/Album_Track";
 import { Youtube } from "pages/Youtube";

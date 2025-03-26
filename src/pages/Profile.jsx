@@ -1,12 +1,13 @@
-import React, { useState } from "react";
 import { DefaultFrame } from "components/global/DefaultFrame";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import styled from "styled-components";
 import { profiles } from "utils/Profile";
 
 export const Profile = () => {
-  const [curProfile, setCurProfile] = useState(undefined);
+  const [cur, setCur] = useState(undefined);
 
+  // motion variants
   const layoutVariants = {
     init: {
       opacity: 0,
@@ -21,153 +22,120 @@ export const Profile = () => {
     },
   };
 
-  const postVariants = {
-    init: {
-      display: "flex",
-      width: "100%",
-      transition: {
-        opacity: { duration: 0.3 },
-        width: { duration: 1 },
-      },
-    },
-    show: {
-      display: "flex",
-      width: "50%",
-      transition: {
-        opacity: { duration: 0.5 },
-        width: { duration: 0 },
-      },
-    },
-    hidden: {
-      display: "none",
-      width: "0%",
-      transition: {
-        opacity: { duration: 0.5 },
-        width: { duration: 0.5 },
-      },
-    },
-  };
-
-  const profileVariants = {
-    init: {
-      opacity: 0,
-    },
-    show: {
-      opacity: 1,
-      transition: {
-        delay: 1,
-        duration: 3.5,
-      },
-    },
+  const contentVariants = {
+    init: {},
+    show: {},
   };
 
   return (
     <DefaultFrame>
       <Layout variants={layoutVariants} initial="init" animate="show">
         {profiles.map((data, idx) => (
-          <React.Fragment key={idx}>
-            <Post
-              $curProfile={curProfile}
-              $curIdx={idx}
-              variants={postVariants}
-              initial="init"
-              animate={curProfile === undefined ? "init" : curProfile === idx ? "show" : "hidden"}
-              onClick={() => setCurProfile(curProfile === undefined ? idx : undefined)}
-            >
-              <Image src={data.img} $curProfile={curProfile} $curIdx={idx} />
-            </Post>
-          </React.Fragment>
+          <Post key={idx} $cur={cur} onClick={() => setCur(cur === undefined ? idx : undefined)}>
+            <>
+              <Image src={data.img} $cur={cur} $idx={idx} alt="image" />
+              <Content $cur={cur} $idx={idx} className="content">
+                <English_Name>{profiles[idx].english_name}</English_Name>
+                <Info>
+                  <span>{profiles[idx].born_name}</span>
+                  <span>{profiles[idx].birth}</span>
+                  <span>{profiles[idx].position}</span>
+                  <Debut>
+                    {profiles[idx].debut.map((data, idx) => (
+                      <p key={idx}>
+                        <span>{data.group}</span>: <span style={{}}>{data.date}</span>
+                      </p>
+                    ))}
+                  </Debut>
+                </Info>
+              </Content>
+            </>
+          </Post>
         ))}
-        {curProfile !== undefined && (
-          <ProfileContent variants={profileVariants} initial="init" animate="show">
-            <English_Name>{profiles[curProfile].english_name}</English_Name>
-            <DividedProfile>
-              <span>이름</span> {profiles[curProfile].born_name}
-            </DividedProfile>
-            <DividedProfile>
-              <span>생년월일</span>
-              {profiles[curProfile].birth}
-            </DividedProfile>
-            <DividedProfile>
-              <span>포지션</span>
-              {profiles[curProfile].position}
-            </DividedProfile>
-            <DividedProfile>
-              <span>데뷔</span>
-              <Debut>
-                {profiles[curProfile].debut.map((data, idx) => (
-                  <p key={idx}>
-                    <span>{data.group}</span>: <span style={{}}>{data.date}</span>
-                  </p>
-                ))}
-              </Debut>
-            </DividedProfile>
-          </ProfileContent>
-        )}
       </Layout>
     </DefaultFrame>
   );
 };
 
 const Layout = styled(motion.div)`
-  width: 80%;
+  height: 100%;
+  width: 95%;
   display: flex;
   align-items: center;
-`;
-
-const Standard = styled.div`
-  width: 5%;
-  height: 95%;
-  background-color: #141a26;
-  background-image: linear-gradient(135deg, #141a26 0%, #1d2436 22%, #2b4c5b 49%, #397283 75%, #529fb3 100%);
-`;
-
-const Post = styled(motion.div)`
-  // display: ${({ $curProfile, $curIdx }) =>
-    $curProfile === undefined ? `flex` : $curProfile === $curIdx ? `flex` : `none`};
-  // width: ${({ $curProfile, $curIdx }) =>
-    $curProfile === undefined ? `100%` : $curProfile === $curIdx ? `50%` : `0%`};
-  flex-direction: column;
   gap: 0.5rem;
-  height: 98%;
-  padding: 0.3rem;
-`;
-
-const Image = styled(motion.img)`
-  width: ${({ $curProfile, $curIdx }) =>
-    $curProfile === undefined ? `100%` : $curProfile === $curIdx ? `100%` : `0%`};
-  height: 100%;
-  border-radius: 10px;
-`;
-
-const ProfileContent = styled(motion.div)`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 1.5rem;
-  margin-left: 1rem;
-  padding-bottom: 5rem;
-  font-family: SUIT-SemiBold;
-  font-size: 1rem;
-`;
-const English_Name = styled.div`
-  font-family: SUIT-Bold;
-  font-size: 3rem;
-`;
-const DividedProfile = styled.div`
-  display: flex;
-  margin-left: 0.8rem;
-  span {
-    display: inline-block;
-    width: 70px;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 90%;
   }
 `;
 
+// post
+const Post = styled(motion.div)`
+  height: 90%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  @media (max-width: 700px) {
+    min-height: 400px;
+    min-width: 270px;
+  }
+`;
+
+// profile image
+const Image = styled(motion.img)`
+  width: 100%;
+  height: ${({ $cur, $idx }) => ($cur === undefined ? "100%" : $cur === $idx ? "80%" : "100%")};
+  z-index: 1;
+  border-radius: 10px;
+  transition-duration: 1s;
+`;
+
+// member info
+const Content = styled(motion.div)`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0.5rem;
+  font-family: SUIT-Regular;
+  border-radius: 10px;
+  background-color: #4f959d;
+  z-index: ${({ $cur, $idx }) => ($cur === $idx ? "2" : "0")};
+  transition-duration: 1s;
+  @media ${({ theme }) => theme.media.laptop}, ${({ theme }) => theme.media.desktop} {
+    height: 35%;
+    font-size: 0.8rem;
+  }
+  @media ${({ theme }) => theme.media.tablet}, (max-width: 700px) {
+    min-height: 45%;
+    padding: 0.3rem;
+    font-size: 0.8rem;
+  }
+`;
+const English_Name = styled.div`
+  color: white;
+  font-family: SUIT-Bold;
+  font-size: 1rem;
+  text-align: center;
+`;
+const Info = styled.div`
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+  padding: 0rem 3rem;
+  margin-top: 1rem;
+  color: #fdfbee;
+`;
 const Debut = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
   span {
     width: 100px;
   }
