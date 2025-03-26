@@ -21,6 +21,7 @@ export const Playlists_Track = () => {
 
   const { isLoading, data } = useQueryYoutube(youtubePlaylistItemsApiUrl, params, playlistId);
   const flatData = data?.items;
+  console.log(data);
 
   return (
     <DefaultFrame>
@@ -52,8 +53,8 @@ export const Playlists_Track = () => {
                 {flatData.map((list, idx) => (
                   <Items key={idx} onClick={() => setCurMV(idx)}>
                     <span>{idx + 1}</span>
-                    <img src={list.snippet.thumbnails.default.url} />
-                    <span>{list.snippet.title}</span>
+                    <img src={list?.snippet?.thumbnails?.default?.url} />
+                    <span>{list?.snippet?.title}</span>
                   </Items>
                 ))}
               </List>
