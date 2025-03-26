@@ -44,7 +44,7 @@ export const Youtube = () => {
     key: process.env.REACT_APP_API_KEY,
     part: "snippet",
     channelId,
-    maxResults: 50,
+    maxResults: 30,
   });
 
   const useCommonUseInfiniteQuery = (channelId, queryKey) => {
@@ -111,8 +111,8 @@ export const Youtube = () => {
       {loading ? (
         <></>
       ) : (
-        <Layout className="layout" variants={layoutVariants} initial="init" animate="show">
-          <SlideChannelFrame className="channel">
+        <Layout variants={layoutVariants} initial="init" animate="show">
+          <SlideChannelFrame>
             {page !== 0 && (
               <SlideArrowBtn
                 onClick={() => {
@@ -123,7 +123,7 @@ export const Youtube = () => {
                 <IoIosArrowDropleft size={20} />
               </SlideArrowBtn>
             )}
-            <Content className="content">
+            <Content>
               <ChannelInfo
                 onClick={() => window.open(`https://www.youtube.com/${channels.data[page].snippet.customUrl}`)}
               >
@@ -246,9 +246,10 @@ const ChannelInfo = styled.div`
   font-size: 14px;
   font-family: SUIT-Regular;
 `;
+// youtube
 const PlayLists = styled(motion.div)`
   display: grid;
-  // grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   justify-items: center;
   gap: 1rem;
   max-height: 100%;
@@ -258,43 +259,25 @@ const PlayLists = styled(motion.div)`
     border-radius: 10px;
     overflow: hidden;
   }
-  @media ${({
-      theme: {
-        media: { desktop },
-      },
-    }) => desktop} {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
-  @media ${({
-      theme: {
-        media: { laptop },
-      },
-    }) => laptop} {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
-  @media ${({
-      theme: {
-        media: { tablet },
-      },
-    }) => tablet} {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  }
-  @media ${({
-      theme: {
-        media: { smaller },
-      },
-    }) => smaller} {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  @media (max-width: 1365px) {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    img {
+      min-width: 380px;
+    }
   }
 `;
 const PlayItem = styled(NavLink)`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.5rem;
   font-size: 14px;
   font-family: SUIT-SemiBold;
   text-decoration-line: none;
   color: black;
+  @media (min-width: 1365px) {
+    width: 320px;
+  }
 `;
 
 // common button
