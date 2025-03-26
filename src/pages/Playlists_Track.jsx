@@ -27,10 +27,10 @@ export const Playlists_Track = () => {
       {isLoading ? (
         <></>
       ) : (
-        <Layout className="layout">
+        <Layout>
           <Back onClick={() => navigate(-1)}>{"< Back"}</Back>
           <PlayListFrame>
-            <VideoFrame className="frame">
+            <VideoFrame>
               <YouTube
                 videoId={flatData[curMV].snippet.resourceId.videoId}
                 style={{
