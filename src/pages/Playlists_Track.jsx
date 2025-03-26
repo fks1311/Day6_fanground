@@ -21,7 +21,6 @@ export const Playlists_Track = () => {
 
   const { isLoading, data } = useQueryYoutube(youtubePlaylistItemsApiUrl, params, playlistId);
   const flatData = data?.items;
-  console.log(data);
 
   return (
     <DefaultFrame>
