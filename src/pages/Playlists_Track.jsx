@@ -29,9 +29,10 @@ export const Playlists_Track = () => {
       ) : (
         <Layout>
           <Back onClick={() => navigate(-1)}>{"< Back"}</Back>
-          <PlayListFrame>
+          <PlayListFrame className="frame">
             <VideoFrame>
               <YouTube
+                className="youtube"
                 videoId={flatData[curMV].snippet.resourceId.videoId}
                 style={{
                   borderRadius: "10px",
@@ -74,6 +75,20 @@ const Layout = styled.div`
   padding: 2rem;
   border-radius: 10px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    height: 80%;
+  }
+  @media ${({
+      theme: {
+        media: { tablet },
+      },
+    }) => tablet} {
+    height: 75%;
+  }
 `;
 
 const Back = styled.div`
@@ -90,10 +105,34 @@ const PlayListFrame = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    flex-direction: column;
+  }
 `;
 
 const VideoFrame = styled.div`
   flex: 1;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    flex: 0;
+  }
+  @media ${({
+      theme: {
+        media: { tablet },
+      },
+    }) => tablet} {
+    .youtube {
+      // width: 50vw;
+      height: 60vh;
+    }
+  }
 `;
 const Playlists = styled.div`
   flex: 0.5;
