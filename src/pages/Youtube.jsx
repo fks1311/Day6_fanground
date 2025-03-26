@@ -111,8 +111,8 @@ export const Youtube = () => {
       {loading ? (
         <></>
       ) : (
-        <Layout variants={layoutVariants} initial="init" animate="show">
-          <SlideChannelFrame>
+        <Layout className="layout" variants={layoutVariants} initial="init" animate="show">
+          <SlideChannelFrame className="channel">
             {page !== 0 && (
               <SlideArrowBtn
                 onClick={() => {
@@ -123,8 +123,10 @@ export const Youtube = () => {
                 <IoIosArrowDropleft size={20} />
               </SlideArrowBtn>
             )}
-            <Content>
-              <ChannelInfo>
+            <Content className="content">
+              <ChannelInfo
+                onClick={() => window.open(`https://www.youtube.com/${channels.data[page].snippet.customUrl}`)}
+              >
                 <img src={channels.data[page].snippet.thumbnails.default?.url} />
                 <div>
                   <p className="title">{channels.data[page].snippet.title}</p>
@@ -199,7 +201,6 @@ const SlideChannelFrame = styled(motion.div)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // gap: 1rem;
   padding: 1rem;
 `;
 const RefetchBtnFrame = styled.div`
@@ -247,7 +248,7 @@ const ChannelInfo = styled.div`
 `;
 const PlayLists = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  // grid-template-columns: repeat(4, 1fr);
   justify-items: center;
   gap: 1rem;
   max-height: 100%;
@@ -256,6 +257,34 @@ const PlayLists = styled(motion.div)`
   .img-out-frame {
     border-radius: 10px;
     overflow: hidden;
+  }
+  @media ${({
+      theme: {
+        media: { desktop },
+      },
+    }) => desktop} {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  @media ${({
+      theme: {
+        media: { tablet },
+      },
+    }) => tablet} {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  @media ${({
+      theme: {
+        media: { smaller },
+      },
+    }) => smaller} {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 `;
 const PlayItem = styled(NavLink)`
