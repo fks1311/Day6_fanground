@@ -22,11 +22,6 @@ export const Profile = () => {
     },
   };
 
-  const contentVariants = {
-    init: {},
-    show: {},
-  };
-
   return (
     <DefaultFrame>
       <Layout variants={layoutVariants} initial="init" animate="show">
@@ -34,21 +29,27 @@ export const Profile = () => {
           <Post key={idx} $cur={cur} onClick={() => setCur(cur === undefined ? idx : undefined)}>
             <>
               <Image src={data.img} $cur={cur} $idx={idx} alt="image" />
-              <Content $cur={cur} $idx={idx} className="content">
-                <English_Name>{profiles[idx].english_name}</English_Name>
-                <Info>
-                  <span>{profiles[idx].born_name}</span>
-                  <span>{profiles[idx].birth}</span>
-                  <span>{profiles[idx].position}</span>
-                  <Debut>
-                    {profiles[idx].debut.map((data, idx) => (
-                      <p key={idx}>
-                        <span>{data.group}</span>: <span style={{}}>{data.date}</span>
-                      </p>
-                    ))}
-                  </Debut>
-                </Info>
-              </Content>
+              {cur === undefined ? (
+                <></>
+              ) : (
+                <>
+                  <Content $cur={cur} $idx={idx} className="content">
+                    <English_Name>{profiles[idx].english_name}</English_Name>
+                    <Info>
+                      <span>{profiles[idx].born_name}</span>
+                      <span>{profiles[idx].birth}</span>
+                      <span>{profiles[idx].position}</span>
+                      <Debut>
+                        {profiles[idx].debut.map((data, idx) => (
+                          <p key={idx}>
+                            <span>{data.group}</span>: <span style={{}}>{data.date}</span>
+                          </p>
+                        ))}
+                      </Debut>
+                    </Info>
+                  </Content>
+                </>
+              )}
             </>
           </Post>
         ))}

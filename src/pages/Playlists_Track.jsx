@@ -1,6 +1,7 @@
 import { DefaultFrame } from "components/global/DefaultFrame";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useWindowSize } from "react-use";
 import YouTube from "react-youtube";
 import styled from "styled-components";
 import { useQueryYoutube } from "utils/collectFunctions";
@@ -10,6 +11,7 @@ export const Playlists_Track = () => {
   const navigate = useNavigate();
   const playlistId = location.pathname.substring(7);
   const [curMV, setCurMV] = useState(0);
+  const windowsize = useWindowSize();
 
   const youtubePlaylistItemsApiUrl = "https://www.googleapis.com/youtube/v3/playlistItems";
   const params = {
@@ -29,7 +31,7 @@ export const Playlists_Track = () => {
       ) : (
         <Layout>
           <Back onClick={() => navigate(-1)}>{"< Back"}</Back>
-          <PlayListFrame className="frame">
+          <PlayListFrame>
             <VideoFrame>
               <YouTube
                 className="youtube"
@@ -40,7 +42,7 @@ export const Playlists_Track = () => {
                 }}
                 opts={{
                   width: "100%",
-                  height: "650",
+                  height: windowsize.width >= 1240 ? "100%" : "500",
                 }}
               />
             </VideoFrame>
@@ -67,7 +69,7 @@ export const Playlists_Track = () => {
 
 const Layout = styled.div`
   width: 80%;
-  height: 95%;
+  // height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -80,7 +82,7 @@ const Layout = styled.div`
         media: { laptop },
       },
     }) => laptop} {
-    height: 80%;
+    height: 90%;
   }
   @media ${({
       theme: {
@@ -101,6 +103,7 @@ const Back = styled.div`
 const PlayListFrame = styled.div`
   display: flex;
   gap: 1rem;
+  height: 90%;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
     display: none;
@@ -116,6 +119,9 @@ const PlayListFrame = styled.div`
 
 const VideoFrame = styled.div`
   flex: 1;
+  .youtube {
+    height: 100%;
+  }
   @media ${({
       theme: {
         media: { laptop },
@@ -140,6 +146,14 @@ const Playlists = styled.div`
   overflow-y: auto;
   border-radius: 10px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    // height: 700px;
+    flex: 1;
+  }
 `;
 
 const PlaylistTitle = styled.div`
@@ -154,6 +168,13 @@ const PlaylistTitle = styled.div`
   border-radius: 10px 10px 0px 0px;
   background-color: white;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  @media ${({
+      theme: {
+        media: { laptop },
+      },
+    }) => laptop} {
+    height: 15%;
+  }
 `;
 const List = styled.div`
   height: 590px;
