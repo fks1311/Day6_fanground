@@ -114,7 +114,7 @@ export const Album_Track = () => {
           </BackBtn>
           <AlbumFrame>
             <AlbumTitle gradients={mvData[0].gradients}>{decodeURI(location.state.album)}</AlbumTitle>
-            <AlbumInfo>
+            <AlbumInfo className="info">
               <AlbumMusicVideo>
                 <YouTube
                   key={videoKey}
@@ -228,6 +228,7 @@ const AlbumInfo = styled.div`
       },
     }) => tablet} {
     flex-direction: column;
+    flex: 1;
   }
 `;
 const AlbumMusicVideo = styled.div`
@@ -254,6 +255,7 @@ const AlbumMusicVideo = styled.div`
     .youtube {
       width: 75vw;
     }
+    flex: 1;
   }
   @media ${({
       theme: {
@@ -273,6 +275,13 @@ const Accordion = styled(motion.div)`
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 2rem;
+  @media ${({
+      theme: {
+        media: { tablet },
+      },
+    }) => tablet} {
+    flex: 0;
+  }
 `;
 const Subject = styled(motion.div)`
   position: sticky;

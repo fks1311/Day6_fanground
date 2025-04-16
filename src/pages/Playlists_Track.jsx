@@ -69,7 +69,6 @@ export const Playlists_Track = () => {
 
 const Layout = styled.div`
   width: 80%;
-  // height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -89,7 +88,7 @@ const Layout = styled.div`
         media: { tablet },
       },
     }) => tablet} {
-    height: 75%;
+    height: 90%;
   }
 `;
 
