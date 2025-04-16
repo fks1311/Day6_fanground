@@ -1,5 +1,5 @@
 ## DAY6 Fanground
-
+![스크린샷 2025-04-16 18 01 32](https://github.com/user-attachments/assets/73ee047c-3f93-4df4-b84f-0de7308c0acf)
 [VIEW LIVE PROJECT →](https://day6-fanground.vercel.app/)
 
 ## Introduction
