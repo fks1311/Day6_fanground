@@ -17,7 +17,6 @@ React 기반으로 만들어진 밴드 DAY6 팬 페이지
 
 - React
 - Axios
-- Recoil
 - Tanstack Query
 - Styled-components
 - Framer-motion
